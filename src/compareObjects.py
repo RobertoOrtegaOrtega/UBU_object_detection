@@ -1,12 +1,14 @@
 import cv2
 from matplotlib import pyplot as plt
 
-imagen1 = cv2.imread('imagen.png')
-imagen2 = cv2.imread('imagen2.png')
+imagen1 = cv2.imread('faseFinal.png')
+imagen2 = cv2.imread('faseFinal.png')
+imagenAux1=cv2.absdiff(imagen1,imagen2)
+cv2.imwrite('aux6.png',imagenAux1)
 
-plt.subplot(421), plt.imshow(imagen1), plt.title('Original 1')
+plt.subplot(421), plt.imshow(imagen1), plt.title('fase Final')
 plt.xticks([]), plt.yticks([])
-plt.subplot(422), plt.imshow(imagen2), plt.title('Original 2')
+plt.subplot(422), plt.imshow(imagen2), plt.title('fase Final')
 plt.xticks([]), plt.yticks([])
 
 imagenGris1 = cv2.cvtColor(imagen1, cv2.COLOR_BGR2GRAY)
@@ -48,8 +50,8 @@ plt.subplot(425), plt.imshow(mediana1), plt.title('rectangulo')
 plt.xticks([]), plt.yticks([])
 plt.subplot(426), plt.imshow(mediana2), plt.title('rectangulo')
 plt.xticks([]), plt.yticks([])
-plt.subplot(427), plt.imshow(imUmb3), plt.title('rectangulo')
+plt.subplot(427), plt.imshow(imUmb3), plt.title('objetos restantes')
 plt.xticks([]), plt.yticks([])
-plt.subplot(428), plt.imshow(imgDiff), plt.title('rectangulo')
+plt.subplot(428), plt.imshow(imagenAux1), plt.title('objetos restantes')
 plt.xticks([]), plt.yticks([])
 plt.show()
