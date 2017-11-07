@@ -1,3 +1,4 @@
+#Script principal
 print('Bienvenido')
 print('¿La pieza que desea supervisar tiene una fase de montaje predefinido?')
 print('1.- Si, tiene unas fases establecidas las cuales son inmutables')
