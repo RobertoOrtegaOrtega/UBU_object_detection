@@ -2,6 +2,7 @@
 #Script principal
 from src.compareObjects2 import compareObjects
 from src.countObjects import countObject
+from src.objectDetection import objectDetection
 
 print('Bienvenido')
 print('¿La pieza que desea supervisar tiene una fase de montaje predefinido?')
@@ -40,5 +41,5 @@ else:
     else:
         print('montaje de prueba')
         imagen='faseFinal_3.png'
-        objetos=countObject(imagen)
-        print(objetos)
+        objectDetection(imagen)
+        objetos=countObject('objetos.png',imagen)
