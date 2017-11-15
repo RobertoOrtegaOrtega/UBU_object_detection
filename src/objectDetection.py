@@ -1,42 +1,33 @@
 import cv2
-from matplotlib import pyplot as plt
+import numpy as np
 
-imagen = cv2.imread('imagen.png')
-
-plt.subplot(221), plt.imshow(imagen), plt.title('Original')
-plt.xticks([]), plt.yticks([])
-
-imagenGris = cv2.cvtColor(imagen, cv2.COLOR_BGR2GRAY)
-
-mediana = cv2.blur(imagenGris, (20,20))
-#No funciona con mala luz, o extraña
-#t, imUmb = cv2.threshold(imagenGris, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_TRIANGLE)
-
-imUmb = cv2.adaptiveThreshold (mediana, 255, cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY, 11,2)
-
-_, contours, _ = cv2.findContours(imUmb, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-#dibuja borde
-for c in contours:
-    print(c);
-    area = cv2.contourArea(c)
-    if area > 1000 and area < 1000000:
-        cv2.drawContours(mediana, [c], 0, (0, 255, 0), 2, cv2.LINE_AA)
-
-plt.subplot(222), plt.imshow(imUmb), plt.title('bordes')
-plt.xticks([]), plt.yticks([])
-plt.subplot(223), plt.imshow(mediana), plt.title('rectangulo')
-plt.xticks([]), plt.yticks([])
-
-
-#dibuja recuadro
-"""for c in contours:
-     area = cv2.contourArea(c)
-     #retocar area minima y maxima posible
-     if area > 1000 and area < 1000000:
-         (x, y, w, h) = cv2.boundingRect(c)
-         cv2.rectangle(mediana, (x, y), (x + w, y + h), (255, 0, 0), 1, cv2.LINE_AA)"""
-
-plt.subplot(224), plt.imshow(contours), plt.title('rectangulo')
-plt.xticks([]), plt.yticks([])
-
-plt.show()
+def objectDetection(imagen):
+    img = cv2.imread(imagen, 0)
+    suavizado = cv2.blur(img, (10, 10))
+    imUmb = cv2.adaptiveThreshold(suavizado, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 11, 2)
+    kernel = np.ones((10, 10), np.uint8)
+    imUmb = cv2.morphologyEx(imUmb, cv2.MORPH_OPEN, kernel)
+    inv = cv2.bitwise_not(imUmb)
+    dim = np.shape(inv)
+    bordes = np.zeros(dim)
+    # primera y ultima fila
+    bordes[0] = 1;
+    bordes[dim[0] - 1] = 1;
+    # primera y ultima col
+    for i in range(dim[0]):
+        bordes[i][0] = 1;
+        bordes[i][dim[1] - 1] = 1;
+    fin = False;
+    kernel = np.ones((5, 5), np.uint8)
+    count = 1
+    while (~fin):
+        aux = cv2.dilate(bordes, kernel, iterations=1)
+        aux = cv2.bitwise_and(aux, aux, dst=None, mask=imUmb)
+        if count > 400:
+            break
+        bordes = aux
+        count = count + 1
+    cv2.imwrite('objetos.png', bordes)
+    cv2.imshow("mis objetos", bordes)
+    cv2.imshow("imagen", img)
+    cv2.waitKey(0)
