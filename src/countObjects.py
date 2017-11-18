@@ -18,11 +18,10 @@ def countObject(imagen1,imagen2):
             (x, y, w, h) = cv2.boundingRect(c)
             cv2.rectangle(img2, (x, y), (x + w, y + h), (255, 0, 0), 1, cv2.LINE_AA)
             #cv2.drawContours(img, [box], 0, (0, 255, 0), 2, cv2.LINE_AA)
-            if contornoOk !=1:
-                cv2.imshow('parte',img2[y:y+h,x:x+w])
-                nombre='objeto'+ str(contornoOk-1) + '.png'
-                cv2.imwrite(nombre, img2[y:y+h,x:x+w])
-                cv2.waitKey(0)
+            cv2.imshow('parte',img2[y:y+h,x:x+w])
+            nombre='objeto'+ str(contornoOk-1) + '.png'
+            cv2.imwrite(nombre, img2[y:y+h,x:x+w])
+            cv2.waitKey(0)
 
-    print("He encontrado %d objetos" %contornoOk-1)
-    return contornoOk-1
+    print("He encontrado %d objetos" %contornoOk)
+    return contornoOk
