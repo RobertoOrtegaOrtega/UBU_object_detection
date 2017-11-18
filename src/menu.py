@@ -14,13 +14,25 @@ while opcion<1 or opcion>2:
 previo='l'
 while previo != 'n' and previo != 'y':
     print('¿Se conoce con anterioridad las fases de montaje de la pieza o el resultado final?')
-    previo = input('(y/n)',)
-    print(previo != 'n' or previo != 'y')
+    previo = input('(y/n)')
+
 if opcion==1:
     if previo=='y':
         print('catalogo de piezas que pueden ser montadas')
+        val = 0
+        for i in range(4):
+            cad = 'fase' + str(i + 1) + '.png'
+            print(cad)
+            val = val + compareObjects(cad, 'fase4.png')
+        print(val)
+
     else:
         print('montaje de prueba')
+        for i in range(4):
+            cad = 'fase' + str(i + 1) + '.png'
+
+            objectDetection(cad)
+            objetos = countObject('objetos.png', cad)
 else:
     if previo == 'y':
         print('catalogo de piezas que pueden ser montadas')
@@ -36,7 +48,7 @@ else:
         for i in range(12):
             print(i)
             cad = 'sector' + str(i + 1) + '.png'
-            val = val + compareObjects(cad, 'puzzleFinal.png')
+            val = val + compareObjects(cad, 'puzzle.png')
         print(val)
     else:
         print('montaje de prueba')
