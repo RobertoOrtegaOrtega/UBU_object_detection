@@ -27,6 +27,7 @@ def objectDetection(imagen):
             break
         bordes = aux
         count = count + 1
+
     aux=aux*255
     cv2.imshow("mis objetos", aux)
     cv2.imwrite('objetos.png', aux)
