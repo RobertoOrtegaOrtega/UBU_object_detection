@@ -1,7 +1,9 @@
 import cv2
 import numpy as np
+import sqlite3
 
-def objectDetection(imagen):
+def objectDetection(imagen,montaje):
+    imagen=imagen+'.png'
     img = cv2.imread(imagen, 0)
     suavizado = cv2.blur(img, (10, 10))
     imUmb = cv2.adaptiveThreshold(suavizado, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 11, 2)
@@ -29,4 +31,11 @@ def objectDetection(imagen):
         count = count + 1
 
     aux=aux*255
-    cv2.imwrite('objetos.png', aux)
+    conexion = sqlite3.connect(r'C:\Users\Roberto\PycharmProjects\UBU_object_detection\sqlite\Montajes')
+    conexion.execute('''DELETE FROM OBJETO;''');
+    conexion.execute('''INSERT INTO OBJETO
+          VALUES (?,?,?)''',(str(1),"objetos"+montaje,montaje));
+    conexion.commit()
+    conexion.close()
+    nombre='objetos'+montaje+'.png'
+    cv2.imwrite(nombre, aux)
