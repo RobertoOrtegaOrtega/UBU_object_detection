@@ -29,7 +29,4 @@ def objectDetection(imagen):
         count = count + 1
 
     aux=aux*255
-    cv2.imshow("mis objetos", aux)
     cv2.imwrite('objetos.png', aux)
-    cv2.imshow("imagen", img)
-    cv2.waitKey(0)
