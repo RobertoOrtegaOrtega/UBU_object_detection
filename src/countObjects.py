@@ -16,15 +16,14 @@ def countObject(imagen1,imagen2,montaje):
             print('-----------------')
             contornoOk=contornoOk+1
             (x, y, w, h) = cv2.boundingRect(c)
-            cv2.rectangle(img2, (x, y), (x + w, y + h), (255, 0, 0), 1, cv2.LINE_AA)
-            cv2.drawContours(img2, [c], 0, (0, 255, 0), 2, cv2.LINE_AA)
-            sentencia = 'INSERT INTO OBJETO (ID,NOMBRE,MONATAJE) VALUES (' + str(contornoOk+1) + ',' + 'objeto' + str(contornoOk) + montaje + ',' + montaje + ')'
+            conexion.execute('''DELETE FROM OBJETO WHERE ID=?;''',(str(contornoOk+11),));
             conexion.execute('''INSERT INTO OBJETO
-                      VALUES (?,?,?)''', (str(contornoOk+1) , 'objeto' + str(contornoOk) + montaje, montaje));
+                      VALUES (?,?,?)''', (str(contornoOk+11) , 'objeto' + str(contornoOk) + montaje, montaje));
             conexion.commit()
-            nombre = 'objeto' + str(contornoOk - 1) + '.png'
-            cv2.imshow(nombre, img2[y:y + h, x:x + w])
-            cv2.imwrite(nombre, img2[y:y+h,x:x+w])
+            nombre = 'objeto' + str(contornoOk) + montaje
+            cv2.imshow(nombre, img2[y-30:y + h+30, x-30:x + w+30])
+            nombre=nombre+'.png'
+            cv2.imwrite(nombre, img2[y-30:y + h+30, x-30:x + w+30])
             cv2.waitKey(0)
     conexion.close()
     print("He encontrado %d objetos" %contornoOk)
