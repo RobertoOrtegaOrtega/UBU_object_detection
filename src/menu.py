@@ -5,7 +5,25 @@ import cv2
 from src.compareObjects2 import compareObjects
 from src.countObjects import countObject
 from src.objectDetection import objectDetection
-conexion=sqlite3.connect(r'C:\Users\Roberto\PycharmProjects\UBU_object_detection\sqlite\Montajes')
+
+conexion = sqlite3.connect(r'C:\Users\Roberto\PycharmProjects\UBU_object_detection\sqlite\Montajes')
+conexion.execute('''DELETE FROM IMAGEN_ALE WHERE ID=2;''');
+conexion.commit()
+cursor = conexion.execute("SELECT ID,NOMBRE,MONTAJE FROM OBJETO;")
+print("TABLA OBJETO")
+for pos in cursor:
+    texto = 'ID = ' + str(pos[0]) + ' // Nombre = ' + str(pos[1]) + ' // Montaje = ' + str(pos[2])
+    print(texto)
+cursor = conexion.execute("SELECT ID,NOMBRE,MONTAJE FROM IMAGEN_ALE;")
+print("TABLA IMAGEN ALEATORIA")
+for pos in cursor:
+    texto = 'ID = ' + str(pos[0]) + ' // Nombre = ' + str(pos[1]) + ' // Montaje = ' + str(pos[2])
+    print(texto)
+cursor = conexion.execute("SELECT ID,NOMBRE,MONTAJE FROM IMAGEN_SEQ;")
+print("TABLA IMAGEN SECUENCIAL")
+for pos in cursor:
+    texto = 'ID = ' + str(pos[0]) + ' // Nombre = ' + str(pos[1]) + ' // Montaje = ' + str(pos[2])
+    print(texto)
 
 print('Bienvenido')
 print('¿La pieza que desea supervisar tiene una fase de montaje predefinido?')
@@ -47,9 +65,6 @@ if opcion==1:
             objetos = countObject('objetos.png', cad)
     conexion.close()
 else:
-    conexion.execute("DELETE from IMAGEN_ALE where ID=1;")
-    conexion.execute("INSERT INTO IMAGEN_ALE (ID,NOMBRE,MONTAJE) \
- VALUES (1, 'FaseFinal_1','Montaje1')");
     conexion.commit();
     previo = 'n'
     print('¿Es la pieza una de las siguientes?')
@@ -69,28 +84,41 @@ else:
         cv2.destroyAllWindows()
     if previo == 'n':
         print('montaje de prueba')
+        print("Falta sacar la foto")
+        id=2
+        nombre='FaseFinal_2'
+        montaje='Montaje2'
+        conexion = sqlite3.connect(r'C:\Users\Roberto\PycharmProjects\UBU_object_detection\sqlite\Montajes')
+        conexion.execute('''INSERT INTO IMAGEN_ALE
+                  VALUES (?,?,?)''', (id, nombre, montaje));
+        conexion.commit()
         conexion.close()
         objectDetection(nombre,montaje)
-        objetos=countObject('objetos'+montaje,cad,montaje)
+        objetos=countObject('objetos'+montaje,nombre+'.png',montaje)
         conexion = sqlite3.connect(r'C:\Users\Roberto\PycharmProjects\UBU_object_detection\sqlite\Montajes')
-        cursor = conexion.execute("SELECT ID,NOMBRE,MONTAJE FROM OBJETO;")
-        for pos in cursor:
-            texto = 'ID = '+str(pos[0])+' // Nombre = ' + str(pos[1]) + ' // Montaje = ' + str(pos[2])
-            print(texto)
+        cursor = conexion.execute("SELECT NOMBRE FROM OBJETO WHERE MONTAJE=?;",(montaje,))
+        cont=0
+        for i in cursor:
+            print(i[0])
+            if cont != 0:
+                aciertos = compareObjects(nombre+'.png', i[0] + '.png')
+                if aciertos>15:
+                    print("Pieza encontrada")
+                else:
+                    print("Pieza NO encontrada")
+            cont = cont + 1
         conexion.close()
-    #compareObjects('sector6.png', 'puzzleError.png')
-    # comprobacion estandar de piezas
-    """val=0
-    for i in range(12):
-        print(i)
-        cad='sector'+str(i+1)+'.png'
-        val=val+compareObjects(cad,cad)
-    print(val)"""
-    # ejemplo puzzle
-    """val = 0
-    for i in range(12):
-        print(i)
-        cad = 'sector' + str(i + 1) + '.png'
-        val = val + compareObjects(cad, 'puzzle.png')
-    print(val)"""
-
+    else:
+        conexion = sqlite3.connect(r'C:\Users\Roberto\PycharmProjects\UBU_object_detection\sqlite\Montajes')
+        cursor = conexion.execute("SELECT NOMBRE FROM OBJETO WHERE MONTAJE=?;",(montaje,))
+        cont=0
+        for i in cursor:
+            if cont != 0:
+                print(i[0])
+                aciertos=compareObjects(cad, i[0]+'.png')
+                if aciertos>15:
+                    print("Pieza encontrada")
+                else:
+                    print("Pieza NO encontrada")
+            cont=cont+1
+        conexion.close()
