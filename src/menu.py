@@ -5,10 +5,16 @@ import cv2
 from src.compareObjects2 import compareObjects
 from src.countObjects import countObject
 from src.objectDetection import objectDetection
+from src.takePhoto import takePhoto
 
 conexion = sqlite3.connect(r'C:\Users\Roberto\PycharmProjects\UBU_object_detection\sqlite\Montajes')
-conexion.execute('''DELETE FROM IMAGEN_ALE WHERE ID=2;''');
+"""conexion.execute('''DELETE FROM IMAGEN_ALE;''');
 conexion.commit()
+conexion.execute('''DELETE FROM OBJETO;''');
+conexion.commit()"""
+val=conexion.execute('''SELECT max(ID) FROM IMAGEN_ALE;''')
+for i in val:
+    print(i[0])
 cursor = conexion.execute("SELECT ID,NOMBRE,MONTAJE FROM OBJETO;")
 print("TABLA OBJETO")
 for pos in cursor:
@@ -70,43 +76,51 @@ else:
     print('¿Es la pieza una de las siguientes?')
     cursor = conexion.execute("SELECT nombre,montaje from IMAGEN_ALE")
     for pos in cursor:
-        print("¿Es esta pieza la que desea? ")
-        cad=str(pos[0])+'.png'
-        nombre=str(pos[0])
-        montaje=str(pos[1])
-        texto='Nombre = ' +str(pos[0])+' // Montaje = '+str(pos[1])
-        img=cv2.imread(cad)
-        cv2.imshow(texto,img)
-        if cv2.waitKey(0) & 0xFF == ord('y'):
+        if i[0] != None:
+            print("¿Es esta pieza la que desea? ")
+            cad='BaseDatos/'+str(pos[0])+'.png'
+            nombre=str(pos[0])
+            montaje=str(pos[1])
+            texto='Nombre = ' +str(pos[0])+' // Montaje = '+str(pos[1])
+            img=cv2.imread(cad)
+            cv2.imshow(texto,img)
+            if cv2.waitKey(0) & 0xFF == ord('y'):
+                cv2.destroyAllWindows()
+                previo = 'y'
+                break;
             cv2.destroyAllWindows()
-            previo = 'y'
-            break;
-        cv2.destroyAllWindows()
+        else:
+            print('Base de datos vacia')
     if previo == 'n':
         print('montaje de prueba')
-        print("Falta sacar la foto")
-        id=2
-        nombre='FaseFinal_2'
-        montaje='Montaje2'
         conexion = sqlite3.connect(r'C:\Users\Roberto\PycharmProjects\UBU_object_detection\sqlite\Montajes')
+        val = conexion.execute('''SELECT max(ID) FROM IMAGEN_ALE;''')
+        for i in val:
+            if i[0] == None:
+                val=1
+            else:
+                val=i[0]+1
+        nombre='FaseFinal_'+str(val)
+        montaje='Montaje'+str(val)
+        takePhoto(nombre+'.png')
         conexion.execute('''INSERT INTO IMAGEN_ALE
-                  VALUES (?,?,?)''', (id, nombre, montaje));
+                  VALUES (?,?,?)''', (val, nombre, montaje));
         conexion.commit()
         conexion.close()
-        objectDetection(nombre,montaje)
-        objetos=countObject('objetos'+montaje,nombre+'.png',montaje)
+        objectDetection('BaseDatos/'+nombre,montaje)
+        objetos=countObject('BaseDatos/objetos'+montaje,'BaseDatos/'+nombre+'.png',montaje)
         conexion = sqlite3.connect(r'C:\Users\Roberto\PycharmProjects\UBU_object_detection\sqlite\Montajes')
         cursor = conexion.execute("SELECT NOMBRE FROM OBJETO WHERE MONTAJE=?;",(montaje,))
         cont=0
         for i in cursor:
-            print(i[0])
             if cont != 0:
-                aciertos = compareObjects(nombre+'.png', i[0] + '.png')
+                print(i[0]+'.png')
+                aciertos=compareObjects('BaseDatos/'+nombre+'.png', 'BaseDatos/'+i[0]+'.png')
                 if aciertos>15:
                     print("Pieza encontrada")
                 else:
                     print("Pieza NO encontrada")
-            cont = cont + 1
+            cont=cont+1
         conexion.close()
     else:
         conexion = sqlite3.connect(r'C:\Users\Roberto\PycharmProjects\UBU_object_detection\sqlite\Montajes')
@@ -114,8 +128,8 @@ else:
         cont=0
         for i in cursor:
             if cont != 0:
-                print(i[0])
-                aciertos=compareObjects(cad, i[0]+'.png')
+                print(i[0]+'.png')
+                aciertos=compareObjects(cad, 'BaseDatos/'+i[0]+'.png')
                 if aciertos>15:
                     print("Pieza encontrada")
                 else:
