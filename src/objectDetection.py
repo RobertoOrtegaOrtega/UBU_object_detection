@@ -10,6 +10,9 @@ def objectDetection(imagen,montaje):
     kernel = np.ones((10, 10), np.uint8)
     imUmb = cv2.morphologyEx(imUmb, cv2.MORPH_OPEN, kernel)
     inv = cv2.bitwise_not(imUmb)
+    kernel = np.ones((3,3), np.uint8)
+    inv = cv2.morphologyEx(inv, cv2.MORPH_OPEN, kernel)
+    mascara = cv2.bitwise_not(inv)
     dim = np.shape(inv)
     bordes = np.zeros(dim)
     # primera y ultima fila
@@ -24,7 +27,7 @@ def objectDetection(imagen,montaje):
     count = 1
     while (~fin):
         aux = cv2.dilate(bordes, kernel, iterations=1)
-        aux = cv2.bitwise_and(aux, aux, dst=None, mask=imUmb)
+        aux = cv2.bitwise_and(aux, aux, dst=None, mask=mascara)
         if count > 400:
             break
         bordes = aux
@@ -32,10 +35,16 @@ def objectDetection(imagen,montaje):
 
     aux=aux*255
     conexion = sqlite3.connect(r'C:\Users\Roberto\PycharmProjects\UBU_object_detection\sqlite\Montajes')
-    conexion.execute('''DELETE FROM OBJETO;''');
+    #conexion.execute('''DELETE FROM OBJETO WHERE ID=10;''');
+    val = conexion.execute('''SELECT max(ID) FROM OBJETO;''')
+    for i in val:
+        if i[0] == None:
+            val = 1
+        else:
+            val = i[0] + 1
     conexion.execute('''INSERT INTO OBJETO
-          VALUES (?,?,?)''',(str(1),"objetos"+montaje,montaje));
+          VALUES (?,?,?)''',(str(val),"objetos"+montaje,montaje));
     conexion.commit()
     conexion.close()
-    nombre='objetos'+montaje+'.png'
+    nombre='BaseDatos/objetos'+montaje+'.png'
     cv2.imwrite(nombre, aux)
