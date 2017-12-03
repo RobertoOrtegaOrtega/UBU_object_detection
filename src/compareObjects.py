@@ -6,7 +6,6 @@ def compareObjects():
 
     diferencias = cv2.absdiff(imagen1, imagen2)
 
-    # Buscamos los contornos
     imagen_gris = cv2.cvtColor(diferencias, cv2.COLOR_BGR2GRAY)
 
     cv2.imshow('Imagen1', imagen1)
