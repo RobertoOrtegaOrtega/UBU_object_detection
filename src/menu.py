@@ -2,16 +2,18 @@
 #Script principal
 import sqlite3
 import cv2
-from src.compareObjects2 import compareObjects
+
+from src.compareObjects import compareObjects
+from src.compareObjects2 import compareObjects2
 from src.countObjects import countObject
 from src.objectDetection import objectDetection
 from src.takePhoto import takePhoto
 
 conexion = sqlite3.connect(r'C:\Users\Roberto\PycharmProjects\UBU_object_detection\sqlite\Montajes')
-"""conexion.execute('''DELETE FROM IMAGEN_ALE;''');
+conexion.execute('''DELETE FROM IMAGEN_SEQ;''');
 conexion.commit()
-conexion.execute('''DELETE FROM OBJETO;''');
-conexion.commit()"""
+conexion.execute('''DELETE FROM DIFERENCIAS;''');
+conexion.commit()
 val=conexion.execute('''SELECT max(ID) FROM IMAGEN_ALE;''')
 for i in val:
     print(i[0])
@@ -30,6 +32,11 @@ print("TABLA IMAGEN SECUENCIAL")
 for pos in cursor:
     texto = 'ID = ' + str(pos[0]) + ' // Nombre = ' + str(pos[1]) + ' // Montaje = ' + str(pos[2])
     print(texto)
+cursor = conexion.execute("SELECT ID,NOMBRE,MONTAJE FROM DIFERENCIAS;")
+print("TABLA DIFERENCIAS")
+for pos in cursor:
+    texto = 'ID = ' + str(pos[0]) + ' // Nombre = ' + str(pos[1]) + ' // Montaje = ' + str(pos[2])
+    print(texto)
 
 print('Bienvenido')
 print('¿La pieza que desea supervisar tiene una fase de montaje predefinido?')
@@ -40,43 +47,89 @@ while opcion<1 or opcion>2:
     opcion = int(input('Introduce la opcion deseada'))
 
 if opcion==1:
-    previo = 'l'
-    while previo != 'n' and previo != 'y':
-        print('¿Es la pieza una de las siguientes?')
-        cursor = conexion.execute("SELECT nombre,tipo,montaje from IMAGEN")
-        for pos in cursor:
-            print("Nombre = ", pos[0])
-            print("Tipo = ", pos[1])
-            print("Montaje = ", pos[2], "\n")
-        previo = input('(y/n)')
-    if previo=='y':
-        print('catalogo de piezas que pueden ser montadas')
-        val = 0
-        for i in range(4):
-            cad = 'fase' + str(i + 1) + '.png'
-            print(cad)
-            val = val + compareObjects(cad, 'fase4.png')
-        print(val)
-
-    else:
-        previo = 'l'
-        while previo != 'n' and previo != 'y':
-            print('¿Se conoce con anterioridad las fases de montaje de la pieza o el resultado final?')
-            previo = input('(y/n)')
+    tabla='DIFERENCIAS'
+    previo = 'n'
+    print('¿Es la pieza una de las siguientes?')
+    cursor = conexion.execute("SELECT nombre,montaje from IMAGEN_SEQ")
+    for pos in cursor:
+        if pos != None:
+            print("¿Es esta pieza la que desea? ")
+            cad = 'BaseDatos/' + str(pos[0]) + '.png'
+            nombre = str(pos[0])
+            montaje = str(pos[1])
+            texto = 'Nombre = ' + str(pos[0]) + ' // Montaje = ' + str(pos[1])
+            img = cv2.imread(cad)
+            cv2.imshow(texto, img)
+            if cv2.waitKey(0) & 0xFF == ord('y'):
+                cv2.destroyAllWindows()
+                previo = 'y'
+                break;
+            cv2.destroyAllWindows()
+        else:
+            print('Base de datos vacia')
+    if previo == 'n':
         print('montaje de prueba')
-        for i in range(4):
-            cad = 'fase' + str(i + 1) + '.png'
-
-            objectDetection(cad)
-            objetos = countObject('objetos.png', cad)
-    conexion.close()
+        conexion = sqlite3.connect(r'C:\Users\Roberto\PycharmProjects\UBU_object_detection\sqlite\Montajes')
+        val = conexion.execute('''SELECT max(ID) FROM IMAGEN_SEQ;''')
+        for i in val:
+            if i[0] == None:
+                val = 1
+            else:
+                val = i[0] + 1
+        montaje = 'Montaje' + str(val)
+        contFase=1
+        while True:
+            nombre = 'Fase_' + str(contFase)+montaje
+            #takePhoto(nombre + '.png')
+            conexion.execute('''INSERT INTO IMAGEN_SEQ
+                      VALUES (?,?,?)''', (val+contFase-1, nombre, montaje));
+            conexion.commit()
+            if contFase!=1:
+                salida='dif'+str(contFase-1)+'_'+str(contFase)+montaje
+                compareObjects('Fase_' + str(contFase-1)+montaje,nombre,salida)
+                objectDetection(salida, montaje,tabla)
+                num=countObject(salida, nombre, montaje,tabla)
+                #compruebo que mis diferencias son correctas
+                cursor = conexion.execute("SELECT ID,NOMBRE,MONTAJE FROM IMAGEN_SEQ;")
+                print("TABLA IMAGEN SECUENCIAL")
+                for pos in cursor:
+                    texto = 'ID = ' + str(pos[0]) + ' // Nombre = ' + str(pos[1]) + ' // Montaje = ' + str(pos[2])
+                    print(texto)
+                cursor = conexion.execute("SELECT ID,NOMBRE,MONTAJE FROM DIFERENCIAS;")
+                print("TABLA DIFERENCIAS")
+                for pos in cursor:
+                    texto = 'ID = ' + str(pos[0]) + ' // Nombre = ' + str(pos[1]) + ' // Montaje = ' + str(pos[2])
+                    print(texto)
+                busqueda=salida+'_%'
+                cursor = conexion.execute("SELECT NOMBRE FROM DIFERENCIAS WHERE NOMBRE LIKE ?;",(busqueda,))
+                for pos in cursor:
+                    texto = 'nombre = ' + str(pos[0])
+                    print(texto)
+                    aciertos = compareObjects2(nombre, str(pos[0]))
+            #preguntar si hay mas fases y sair si no es asi
+            contFase=contFase+1
+        #------------------------------------------------------------------------------------------------
+    else:
+        conexion = sqlite3.connect(r'C:\Users\Roberto\PycharmProjects\UBU_object_detection\sqlite\Montajes')
+        cursor = conexion.execute("SELECT NOMBRE FROM OBJETO WHERE MONTAJE=?;", (montaje,))
+        cont = 0
+        for i in cursor:
+            if cont != 0:
+                print(i[0] + '.png')
+                aciertos = compareObjects2(cad, 'BaseDatos/' + i[0] + '.png')
+                if aciertos > 15:
+                    print("Pieza encontrada")
+                else:
+                    print("Pieza NO encontrada")
+            cont = cont + 1
+        conexion.close()
 else:
-    conexion.commit();
+    tabla = 'OBJETO'
     previo = 'n'
     print('¿Es la pieza una de las siguientes?')
     cursor = conexion.execute("SELECT nombre,montaje from IMAGEN_ALE")
     for pos in cursor:
-        if i[0] != None:
+        if pos != None:
             print("¿Es esta pieza la que desea? ")
             cad='BaseDatos/'+str(pos[0])+'.png'
             nombre=str(pos[0])
@@ -115,7 +168,7 @@ else:
         for i in cursor:
             if cont != 0:
                 print(i[0]+'.png')
-                aciertos=compareObjects('BaseDatos/'+nombre+'.png', 'BaseDatos/'+i[0]+'.png')
+                aciertos=compareObjects2('BaseDatos/'+nombre+'.png', 'BaseDatos/'+i[0]+'.png')
                 if aciertos>15:
                     print("Pieza encontrada")
                 else:
@@ -129,7 +182,7 @@ else:
         for i in cursor:
             if cont != 0:
                 print(i[0]+'.png')
-                aciertos=compareObjects(cad, 'BaseDatos/'+i[0]+'.png')
+                aciertos=compareObjects2(cad, 'BaseDatos/'+i[0]+'.png')
                 if aciertos>15:
                     print("Pieza encontrada")
                 else:
