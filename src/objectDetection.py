@@ -2,9 +2,9 @@ import cv2
 import numpy as np
 import sqlite3
 
-def objectDetection(imagen,montaje):
-    imagen=imagen+'.png'
-    img = cv2.imread(imagen, 0)
+def objectDetection(imagen,montaje,tabla):
+    mi_imagen='BaseDatos/'+imagen+'.png'
+    img = cv2.imread(mi_imagen, 0)
     suavizado = cv2.blur(img, (10, 10))
     imUmb = cv2.adaptiveThreshold(suavizado, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 11, 2)
     kernel = np.ones((10, 10), np.uint8)
@@ -35,16 +35,23 @@ def objectDetection(imagen,montaje):
 
     aux=aux*255
     conexion = sqlite3.connect(r'C:\Users\Roberto\PycharmProjects\UBU_object_detection\sqlite\Montajes')
-    #conexion.execute('''DELETE FROM OBJETO WHERE ID=10;''');
-    val = conexion.execute('''SELECT max(ID) FROM OBJETO;''')
+    # conexion.execute('''DELETE FROM OBJETO WHERE ID=10;''');
+    val = conexion.execute('''SELECT max(ID) FROM {};'''.format(tabla))
     for i in val:
         if i[0] == None:
             val = 1
         else:
             val = i[0] + 1
-    conexion.execute('''INSERT INTO OBJETO
-          VALUES (?,?,?)''',(str(val),"objetos"+montaje,montaje));
-    conexion.commit()
-    conexion.close()
-    nombre='BaseDatos/objetos'+montaje+'.png'
-    cv2.imwrite(nombre, aux)
+    if tabla=='OBJETO':
+        conexion.execute('''INSERT INTO OBJETO
+              VALUES (?,?,?)''',(str(val),"objetos"+montaje,montaje));
+        conexion.commit()
+        conexion.close()
+        nombre='BaseDatos/objetos'+montaje+'.png'
+        cv2.imwrite(nombre, aux)
+    else:
+        conexion.execute('''INSERT INTO DIFERENCIAS
+                      VALUES (?,?,?)''', (str(val), imagen, montaje));
+        conexion.commit()
+        conexion.close()
+        cv2.imwrite(mi_imagen, aux)

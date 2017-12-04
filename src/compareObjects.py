@@ -1,8 +1,8 @@
 import cv2
 import numpy as np
-def compareObjects():
-    imagen1 = cv2.imread('BaseDatos/imagen1.png')
-    imagen2 = cv2.imread('BaseDatos/imagen2.png')
+def compareObjects(imagen1,imagen2,salida):
+    imagen1 = cv2.imread('BaseDatos/'+imagen1+'.png')
+    imagen2 = cv2.imread('BaseDatos/'+imagen2+'.png')
 
     diferencias = cv2.absdiff(imagen1, imagen2)
 
@@ -13,4 +13,4 @@ def compareObjects():
     cv2.imshow('Diferencias detectadas', diferencias)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
-    cv2.imwrite('BaseDatos/diff_total.png', diferencias)
+    cv2.imwrite('BaseDatos/'+salida+'.png', diferencias)

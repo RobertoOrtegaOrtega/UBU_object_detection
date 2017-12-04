@@ -2,12 +2,17 @@ import numpy as np
 import cv2
 from matplotlib import pyplot as plt
 
-def compareObjects(imagenBase, imagenBuscar):
+def compareObjects2(imagenBase, imagenBuscar):
 
     CONCORDANCIA_MINIMA = 10
-
-    imagen1 = cv2.imread(imagenBase, 0) # imagen base
-    imagen2 = cv2.imread(imagenBuscar, 0) # imagen a buscar
+    imagenCL1 = cv2.imread('BaseDatos/'+imagenBase+'.png') # imagen base
+    imagenCL2 = cv2.imread('BaseDatos/'+imagenBuscar+'.png') # imagen a buscar
+    cv2.imshow('Imagen1', imagenCL1)
+    cv2.imshow('Imagen2', imagenCL2)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+    imagen1 = cv2.cvtColor(imagenCL1, cv2.COLOR_BGR2GRAY)
+    imagen2 = cv2.cvtColor(imagenCL2, cv2.COLOR_BGR2GRAY)
 
     sift = cv2.xfeatures2d.SIFT_create()
 
@@ -43,20 +48,14 @@ def compareObjects(imagenBase, imagenBuscar):
     else:
         print("Coincidencias insuficientes - %d" % (len(aciertos_validos)))
         matchesMask = None
+
     draw_params = dict(matchColor = (255,0,0),
                        singlePointColor = (0,255,0),
                        matchesMask = matchesMask,
                        flags = 2)
 
-    img3 = cv2.drawMatches(imagen1, puntos1, imagen2, puntos2, aciertos_validos, None, **draw_params)
-    imagen1=cv2.drawKeypoints(imagen1, puntos1, imagen1, flags=cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
-    imagen2=cv2.drawKeypoints(imagen2, puntos2, imagen2, flags=cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+    img3 = cv2.drawMatches(imagenCL1, puntos1, imagenCL2, puntos2, aciertos_validos, None, **draw_params)
 
-    plt.subplot(121), plt.imshow(imagen1), plt.title('img1')
-    plt.xticks([]), plt.yticks([])
-    plt.subplot(122), plt.imshow(imagen2), plt.title('img2')
-    plt.xticks([]), plt.yticks([])
-    plt.show()
     plt.imshow(img3, 'gray'),plt.show()
 
     return len(aciertos_validos)
