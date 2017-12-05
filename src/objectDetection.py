@@ -34,24 +34,35 @@ def objectDetection(imagen,montaje,tabla):
         count = count + 1
 
     aux=aux*255
-    conexion = sqlite3.connect(r'C:\Users\Roberto\PycharmProjects\UBU_object_detection\sqlite\Montajes')
-    # conexion.execute('''DELETE FROM OBJETO WHERE ID=10;''');
-    val = conexion.execute('''SELECT max(ID) FROM {};'''.format(tabla))
-    for i in val:
-        if i[0] == None:
-            val = 1
-        else:
-            val = i[0] + 1
+
     if tabla=='OBJETO':
+        conexion = sqlite3.connect(r'C:\Users\Roberto\PycharmProjects\UBU_object_detection\sqlite\Montajes')
+        # conexion.execute('''DELETE FROM OBJETO WHERE ID=10;''');
+        val = conexion.execute('''SELECT max(ID) FROM {};'''.format(tabla))
+        for i in val:
+            if i[0] == None:
+                val = 1
+            else:
+                val = i[0] + 1
         conexion.execute('''INSERT INTO OBJETO
               VALUES (?,?,?)''',(str(val),"objetos"+montaje,montaje));
         conexion.commit()
         conexion.close()
         nombre='BaseDatos/objetos'+montaje+'.png'
         cv2.imwrite(nombre, aux)
-    else:
+    elif tabla=='DIFERENCIAS':
+        conexion = sqlite3.connect(r'C:\Users\Roberto\PycharmProjects\UBU_object_detection\sqlite\Montajes')
+        # conexion.execute('''DELETE FROM OBJETO WHERE ID=10;''');
+        val = conexion.execute('''SELECT max(ID) FROM {};'''.format(tabla))
+        for i in val:
+            if i[0] == None:
+                val = 1
+            else:
+                val = i[0] + 1
         conexion.execute('''INSERT INTO DIFERENCIAS
                       VALUES (?,?,?)''', (str(val), imagen, montaje));
         conexion.commit()
         conexion.close()
+        cv2.imwrite(mi_imagen, aux)
+    else:
         cv2.imwrite(mi_imagen, aux)

@@ -3,7 +3,7 @@ import cv2
 import sqlite3
 
 def countObject(imagen1,imagen2,montaje,tabla):
-    conexion = sqlite3.connect(r'C:\Users\Roberto\PycharmProjects\UBU_object_detection\sqlite\Montajes')
+
     img1 = cv2.imread('BaseDatos/'+imagen1+'.png', 0)
     img1 = cv2.bitwise_not(img1)
     img2 = cv2.imread('BaseDatos/'+imagen2+'.png')
@@ -13,17 +13,16 @@ def countObject(imagen1,imagen2,montaje,tabla):
     for c in contornos:
         area = cv2.contourArea(c)
         if area > 500:
-            contornoOk=contornoOk+1
-            print(contornoOk)
-            print(area)
             (x, y, w, h) = cv2.boundingRect(c)
-            val = conexion.execute('''SELECT max(ID) FROM {};'''.format(tabla))
-            for i in val:
-                if i[0] == None:
-                    val = 1
-                else:
-                    val = i[0] + 1
             if tabla=='OBJETO':
+                conexion = sqlite3.connect(r'C:\Users\Roberto\PycharmProjects\UBU_object_detection\sqlite\Montajes')
+                val = conexion.execute('''SELECT max(ID) FROM {};'''.format(tabla))
+                for i in val:
+                    if i[0] == None:
+                        val = 1
+                    else:
+                        val = i[0] + 1
+                contornoOk = contornoOk + 1
                 conexion.execute('''INSERT INTO OBJETO
                           VALUES (?,?,?)''', (val , 'objeto' + str(contornoOk) + montaje, montaje));
                 conexion.commit()
@@ -32,15 +31,29 @@ def countObject(imagen1,imagen2,montaje,tabla):
                 nombre=nombre+'.png'
                 cv2.imwrite('BaseDatos/'+nombre, img2[y:y + h, x:x + w])
                 cv2.waitKey(0)
+            elif tabla == 'DIFERENCIAS':
+                conexion = sqlite3.connect(r'C:\Users\Roberto\PycharmProjects\UBU_object_detection\sqlite\Montajes')
+                val = conexion.execute('''SELECT max(ID) FROM {};'''.format(tabla))
+                for i in val:
+                    if i[0] == None:
+                        val = 1
+                    else:
+                        val = i[0] + 1
+                cv2.imshow('Prueba', img2[y:y + h, x:x + w])
+                if cv2.waitKey(0) & 0xFF == ord('s'):
+                    contornoOk = contornoOk + 1
+                    nombre = imagen1 + '_' + str(contornoOk)
+                    conexion.execute('''INSERT INTO DIFERENCIAS
+                              VALUES (?,?,?)''', (val , nombre, montaje));
+                    conexion.commit()
+                    nombre = nombre + '.png'
+                    cv2.imwrite('BaseDatos/' + nombre, img2[y:y + h, x:x + w])
+                cv2.destroyWindow('Prueba')
             else:
+                contornoOk = contornoOk + 1
+                cv2.imshow('Prueba', img2[y:y + h, x:x + w])
                 nombre = imagen1 + '_' + str(contornoOk)
-                conexion.execute('''INSERT INTO DIFERENCIAS
-                          VALUES (?,?,?)''', (val , nombre, montaje));
-                conexion.commit()
-                cv2.imshow(nombre, img2[y:y + h, x:x + w])
-                nombre = nombre + '.png'
-                cv2.imwrite('BaseDatos/' + nombre, img2[y:y + h, x:x + w])
-                cv2.waitKey(0)
+                cv2.imwrite('BaseDatos/auxdif.png', img2[y:y + h, x:x + w])
     #conexion.close()
     print("He encontrado %d objetos" %contornoOk)
     return contornoOk
