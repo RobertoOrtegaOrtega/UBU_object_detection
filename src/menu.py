@@ -10,10 +10,10 @@ from src.objectDetection import objectDetection
 from src.takePhoto import takePhoto
 
 conexion = sqlite3.connect(r'C:\Users\Roberto\PycharmProjects\UBU_object_detection\sqlite\Montajes')
-"""conexion.execute('''DELETE FROM IMAGEN_SEQ;''');
+conexion.execute('''DELETE FROM IMAGEN_ALE WHERE MONTAJE=?;''',('Montaje5',));
 conexion.commit()
-conexion.execute('''DELETE FROM DIFERENCIAS;''');
-conexion.commit()"""
+conexion.execute('''DELETE FROM OBJETO WHERE MONTAJE=?;''',('Montaje5',));
+conexion.commit()
 val=conexion.execute('''SELECT max(ID) FROM IMAGEN_ALE;''')
 for i in val:
     print(i[0])
@@ -112,7 +112,6 @@ if opcion==1:
                 contFase=contFase+1
             else:
                 flag=False
-        #------------------------------------------------------------------------------------------------
     else:
         conexion = sqlite3.connect(r'C:\Users\Roberto\PycharmProjects\UBU_object_detection\sqlite\Montajes')
         cursor = conexion.execute("SELECT ID,NOMBRE,MONTAJE FROM IMAGEN_SEQ WHERE MONTAJE=?;", (montaje,))
@@ -175,15 +174,15 @@ else:
                   VALUES (?,?,?)''', (val, nombre, montaje));
         conexion.commit()
         conexion.close()
-        objectDetection('BaseDatos/'+nombre,montaje)
-        objetos=countObject('BaseDatos/objetos'+montaje,'BaseDatos/'+nombre+'.png',montaje)
+        objectDetection(nombre,montaje,tabla)
+        objetos=countObject('objetos'+montaje,nombre,montaje,tabla)
         conexion = sqlite3.connect(r'C:\Users\Roberto\PycharmProjects\UBU_object_detection\sqlite\Montajes')
         cursor = conexion.execute("SELECT NOMBRE FROM OBJETO WHERE MONTAJE=?;",(montaje,))
         cont=0
         for i in cursor:
             if cont != 0:
                 print(i[0]+'.png')
-                aciertos=compareObjects2('BaseDatos/'+nombre+'.png', 'BaseDatos/'+i[0]+'.png')
+                aciertos=compareObjects2(nombre, i[0])
                 if aciertos>15:
                     print("Pieza encontrada")
                 else:
@@ -191,13 +190,14 @@ else:
             cont=cont+1
         conexion.close()
     else:
+        takePhoto('aux0.png')
         conexion = sqlite3.connect(r'C:\Users\Roberto\PycharmProjects\UBU_object_detection\sqlite\Montajes')
         cursor = conexion.execute("SELECT NOMBRE FROM OBJETO WHERE MONTAJE=?;",(montaje,))
         cont=0
         for i in cursor:
             if cont != 0:
                 print(i[0]+'.png')
-                aciertos=compareObjects2(cad, 'BaseDatos/'+i[0]+'.png')
+                aciertos=compareObjects2('aux0', i[0])
                 if aciertos>15:
                     print("Pieza encontrada")
                 else:
