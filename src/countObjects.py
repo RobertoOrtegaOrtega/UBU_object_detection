@@ -23,14 +23,15 @@ def countObject(imagen1,imagen2,montaje,tabla):
                     else:
                         val = i[0] + 1
                 contornoOk = contornoOk + 1
-                conexion.execute('''INSERT INTO OBJETO
-                          VALUES (?,?,?)''', (val , 'objeto' + str(contornoOk) + montaje, montaje));
-                conexion.commit()
-                nombre = 'objeto' + str(contornoOk) + montaje
-                cv2.imshow(nombre, img2[y:y + h, x:x + w])
-                nombre=nombre+'.png'
-                cv2.imwrite('BaseDatos/'+nombre, img2[y:y + h, x:x + w])
-                cv2.waitKey(0)
+                cv2.imshow('Prueba', img2[y:y + h, x:x + w])
+                if cv2.waitKey(0) & 0xFF == ord('s'):
+                    conexion.execute('''INSERT INTO OBJETO
+                              VALUES (?,?,?)''', (val , 'objeto' + str(contornoOk) + montaje, montaje));
+                    conexion.commit()
+                    nombre = 'objeto' + str(contornoOk) + montaje
+                    cv2.imshow(nombre, img2[y:y + h, x:x + w])
+                    nombre=nombre+'.png'
+                    cv2.imwrite('BaseDatos/'+nombre, img2[y:y + h, x:x + w])
             elif tabla == 'DIFERENCIAS':
                 conexion = sqlite3.connect(r'C:\Users\Roberto\PycharmProjects\UBU_object_detection\sqlite\Montajes')
                 val = conexion.execute('''SELECT max(ID) FROM {};'''.format(tabla))
