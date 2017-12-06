@@ -10,9 +10,9 @@ from src.objectDetection import objectDetection
 from src.takePhoto import takePhoto
 
 conexion = sqlite3.connect(r'C:\Users\Roberto\PycharmProjects\UBU_object_detection\sqlite\Montajes')
-conexion.execute('''DELETE FROM IMAGEN_ALE WHERE MONTAJE=?;''',('Montaje5',));
+conexion.execute('''DELETE FROM IMAGEN_SEQ WHERE MONTAJE=?;''',('Montaje6',));
 conexion.commit()
-conexion.execute('''DELETE FROM OBJETO WHERE MONTAJE=?;''',('Montaje5',));
+conexion.execute('''DELETE FROM DIFERENCIAS WHERE MONTAJE=?;''',('Montaje6',));
 conexion.commit()
 val=conexion.execute('''SELECT max(ID) FROM IMAGEN_ALE;''')
 for i in val:
@@ -81,10 +81,11 @@ if opcion==1:
         val = conexion.execute('''SELECT max(ID) FROM IMAGEN_SEQ;''')
         for i in val:
             if i[0] == None:
+                montaje='Montaje1'
                 val = 1
             else:
+                montaje='Montaje'+str(montaje[len(montaje)-1])
                 val = i[0] + 1
-        montaje = 'Montaje' + str(val)
         contFase=1
         flag=True
         while flag:
