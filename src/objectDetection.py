@@ -36,7 +36,17 @@ def objectDetection(imagen,montaje,tabla):
     aux=aux*255
 
     if tabla=='OBJETO':
-        conexion = sqlite3.connect(r'C:\Users\Roberto\PycharmProjects\UBU_object_detection\sqlite\Montajes')
+        ruta = '../../UBU_object_detection/sqlite/Montajes'
+        ok = True
+        while ok:
+            try:
+                conexion = sqlite3.connect(ruta)
+                ok = False
+            except sqlite3.Error:
+                ok = True
+                print("Oops! Base de datos inexsitente, compruebe la ruta e introduzca una nueva")
+                print('Ruta: ' + ruta)
+                ruta = input('Introduce ruta')
         # conexion.execute('''DELETE FROM OBJETO WHERE ID=10;''');
         val = conexion.execute('''SELECT max(ID) FROM {};'''.format(tabla))
         for i in val:
@@ -51,7 +61,17 @@ def objectDetection(imagen,montaje,tabla):
         nombre='BaseDatos/objetos'+montaje+'.png'
         cv2.imwrite(nombre, aux)
     elif tabla=='DIFERENCIAS':
-        conexion = sqlite3.connect(r'C:\Users\Roberto\PycharmProjects\UBU_object_detection\sqlite\Montajes')
+        ruta = '../../UBU_object_detection/sqlite/Montajes'
+        ok = True
+        while ok:
+            try:
+                conexion = sqlite3.connect(ruta)
+                ok = False
+            except sqlite3.Error:
+                ok = True
+                print("Oops! Base de datos inexsitente, compruebe la ruta e introduzca una nueva")
+                print('Ruta: ' + ruta)
+                ruta = input('Introduce ruta')
         # conexion.execute('''DELETE FROM OBJETO WHERE ID=10;''');
         val = conexion.execute('''SELECT max(ID) FROM {};'''.format(tabla))
         for i in val:
@@ -64,5 +84,7 @@ def objectDetection(imagen,montaje,tabla):
         conexion.commit()
         conexion.close()
         cv2.imwrite(mi_imagen, aux)
-    else:
+    elif tabla=='NONE':
         cv2.imwrite(mi_imagen, aux)
+    else:
+        cv2.imwrite('BaseDatos/auxObjetos.png', aux)

@@ -7,9 +7,6 @@ def compareObjects2(imagenBase, imagenBuscar):
     CONCORDANCIA_MINIMA = 10
     imagenCL1 = cv2.imread('BaseDatos/'+imagenBase+'.png') # imagen base
     imagenCL2 = cv2.imread('BaseDatos/'+imagenBuscar+'.png') # imagen a buscar
-    cv2.imshow('Imagen1', imagenCL1)
-    cv2.imshow('Imagen2', imagenCL2)
-    cv2.waitKey(0)
     cv2.destroyAllWindows()
     imagen1 = cv2.cvtColor(imagenCL1, cv2.COLOR_BGR2GRAY)
     imagen2 = cv2.cvtColor(imagenCL2, cv2.COLOR_BGR2GRAY)
@@ -40,13 +37,12 @@ def compareObjects2(imagenBase, imagenBuscar):
 
         alto, ancho = imagen1.shape
         puntos = np.float32([[0, 0], [0, alto - 1], [ancho - 1, alto - 1], [ancho - 1, 0]]).reshape(-1, 1, 2)
+        #tratar error
         destino = cv2.perspectiveTransform(puntos, M)
 
         imagen2 = cv2.polylines(imagen2, [np.int32(destino)], True, 255, 3, cv2.LINE_AA)
-        print("Coincidencias SUF - %d" % (len(aciertos_validos)))
 
     else:
-        print("Coincidencias insuficientes - %d" % (len(aciertos_validos)))
         matchesMask = None
 
     draw_params = dict(matchColor = (255,0,0),
@@ -56,6 +52,7 @@ def compareObjects2(imagenBase, imagenBuscar):
 
     img3 = cv2.drawMatches(imagenCL1, puntos1, imagenCL2, puntos2, aciertos_validos, None, **draw_params)
 
-    plt.imshow(img3, 'gray'),plt.show()
+    cv2.imshow('diferencias',img3)
+    cv2.waitKey(0)
 
     return len(aciertos_validos)
