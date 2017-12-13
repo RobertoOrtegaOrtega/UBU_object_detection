@@ -2,50 +2,39 @@
 #Script principal
 import sqlite3
 import cv2
+import tkinter
 
+from src.selector import selector
+from src.showDB import showDB
 from src.compareObjects import compareObjects
 from src.compareObjects2 import compareObjects2
 from src.countObjects import countObject
 from src.objectDetection import objectDetection
 from src.takePhoto import takePhoto
-ok=True
-ruta='../../UBU_object_detection/sqlite/Montajes'
-while ok:
-    try:
-        conexion = sqlite3.connect(ruta)
-        ok=False
-    except sqlite3.Error:
-        ok=True
-        print("Oops! Base de datos inexsitente, compruebe la ruta e introduzca una nueva")
-        print('Ruta: '+ruta)
-        ruta=input('Introduce ruta')
-"""conexion.execute('''DELETE FROM IMAGEN_SEQ;''',);
-conexion.commit()
-conexion.execute('''DELETE FROM DIFERENCIAS;''',);
-conexion.commit()"""
-val=conexion.execute('''SELECT max(ID) FROM IMAGEN_ALE;''')
-for i in val:
-    print(i[0])
-cursor = conexion.execute("SELECT ID,NOMBRE,MONTAJE FROM OBJETO;")
-print("TABLA OBJETO")
-for pos in cursor:
-    texto = 'ID = ' + str(pos[0]) + ' // Nombre = ' + str(pos[1]) + ' // Montaje = ' + str(pos[2])
-    print(texto)
-cursor = conexion.execute("SELECT ID,NOMBRE,MONTAJE FROM IMAGEN_ALE;")
-print("TABLA IMAGEN ALEATORIA")
-for pos in cursor:
-    texto = 'ID = ' + str(pos[0]) + ' // Nombre = ' + str(pos[1]) + ' // Montaje = ' + str(pos[2])
-    print(texto)
-cursor = conexion.execute("SELECT ID,NOMBRE,MONTAJE FROM IMAGEN_SEQ;")
-print("TABLA IMAGEN SECUENCIAL")
-for pos in cursor:
-    texto = 'ID = ' + str(pos[0]) + ' // Nombre = ' + str(pos[1]) + ' // Montaje = ' + str(pos[2])
-    print(texto)
-cursor = conexion.execute("SELECT ID,NOMBRE,MONTAJE FROM DIFERENCIAS;")
-print("TABLA DIFERENCIAS")
-for pos in cursor:
-    texto = 'ID = ' + str(pos[0]) + ' // Nombre = ' + str(pos[1]) + ' // Montaje = ' + str(pos[2])
-    print(texto)
+
+
+gui = tkinter.Tk()
+gui.geometry("1500x800")
+gui.title("Menu")
+gui.configure(background='LightBlue')
+botonBD = tkinter.Button(gui, text="BASE DE DATOS",fg='blue',bg='white',font=("Helvetica", 16), relief="ridge", command=showDB)
+botonBD .place(relx=0.9, rely=0.1, anchor="center")
+label1 = tkinter.Label(gui, text="¿Que tipo de montaje se va a supervisar?\n",font=("Helvetica", 16),bg='LightBlue')
+label1.place(relx=0.5, rely=0.4, anchor="center")
+boton1 = tkinter.Button(gui, text="Secuencial",bg='white',font=("Helvetica", 16), relief="ridge", command=lambda:[gui.destroy(),selector(0)])
+boton1.place(relx=0.4, rely=0.6, anchor="center")
+boton2 = tkinter.Button(gui, text="Aleatorio",bg='white',font=("Helvetica", 16), relief="ridge", command=lambda:[gui.destroy(),selector(1)])
+boton2.place(relx=0.6, rely=0.6, anchor="center")
+label2 = tkinter.Label(gui, text="Monitorizacion de montajes industriales\n"
+                                "Realizada por Roberto Ortega Ortega\n"
+                                "Tutorizada por Pedro Snachez\n"
+                                "La aplicacion es capaz de controlar y aprender montajes industriales gracias al tratamiento de imagenes.\n",font=("Helvetica", 12),bg='LightBlue',anchor="w", justify="left")
+label2.place(relx=0.0, rely=0.9)
+gui.mainloop()
+
+
+
+
 while(True):
     print('Bienvenido')
     print('¿La pieza que desea supervisar tiene una fase de montaje predefinido?')
@@ -56,7 +45,7 @@ while(True):
     while opcion<1 or opcion>3:
         opcion = int(input('Introduce la opcion deseada'))
 
-    if opcion==1:
+    """if opcion==1:
         tabla='DIFERENCIAS'
         previo = 'n'
         print('¿Es la pieza una de las siguientes?')
@@ -84,7 +73,7 @@ while(True):
                         break;
                     cv2.destroyAllWindows()
             else:
-                print('Base de datos vacia')
+                print('Base de datos vacia')"""
         if previo == 'n':
             print('montaje de prueba')
             conexion = sqlite3.connect(ruta)
@@ -174,7 +163,7 @@ while(True):
                     break;
 
             conexion.close()
-    elif opcion==2:
+    """elif opcion==2:
         tabla = 'OBJETO'
         previo = 'n'
         print('¿Es la pieza una de las siguientes?')
@@ -194,7 +183,7 @@ while(True):
                     break;
                 cv2.destroyAllWindows()
             else:
-                print('Base de datos vacia')
+                print('Base de datos vacia')"""
         if previo == 'n':
             print('montaje de prueba')
             conexion = sqlite3.connect(ruta)
