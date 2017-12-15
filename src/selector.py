@@ -1,11 +1,28 @@
 import cv2
+import sqlite3
+import tkinter
+from PIL import Image, ImageTk
+
+from src.validarNombre import validarNombre
 
 
 def selector(opcion):
-    if opcion==1:
+    ok = True
+    ruta = '../../UBU_object_detection/sqlite/Montajes'
+    while ok:
+        try:
+            conexion = sqlite3.connect(ruta)
+            ok = False
+        except sqlite3.Error:
+            ok = True
+            print("Oops! Base de datos inexsitente, compruebe la ruta e introduzca una nueva")
+            print('Ruta: ' + ruta)
+            ruta = input('Introduce ruta')
+
+    misImagenes = list()
+    if opcion==0:
         tabla='DIFERENCIAS'
         previo = 'n'
-        print('¿Es la pieza una de las siguientes?')
         cursor = conexion.execute("SELECT DISTINCT MONTAJE FROM IMAGEN_SEQ")
         for pos in cursor:
             if pos != None:
@@ -16,39 +33,65 @@ def selector(opcion):
                 print(valID)
                 cursor2 = conexion.execute("SELECT NOMBRE FROM IMAGEN_SEQ  WHERE ID=?;", (valID,))
                 for pos2 in cursor2:
-                    print("¿Es esta pieza la que desea? ")
-                    print(pos2[0])
                     cad = 'BaseDatos/' + str(pos2[0]) + '.png'
-                    nombre = str(pos[0])
-                    montaje = str(pos[0])
-                    texto = 'Nombre = ' + str(pos2[0]) + ' // Montaje = ' + str(pos[0])
-                    img = cv2.imread(cad)
-                    cv2.imshow(texto, img)
-                    if cv2.waitKey(0) & 0xFF == ord('y'):
-                        cv2.destroyAllWindows()
-                        previo = 'y'
-                        break;
-                    cv2.destroyAllWindows()
-            else:
-                print('Base de datos vacia')
-    elif opcion == 2:
+                    misImagenes.append(cad)
+    elif opcion == 1:
         tabla = 'OBJETO'
         previo = 'n'
         print('¿Es la pieza una de las siguientes?')
         cursor = conexion.execute("SELECT nombre,montaje from IMAGEN_ALE")
         for pos in cursor:
             if pos != None:
-                print("¿Es esta pieza la que desea? ")
                 cad = 'BaseDatos/' + str(pos[0]) + '.png'
-                nombre = str(pos[0])
-                montaje = str(pos[1])
-                texto = 'Nombre = ' + str(pos[0]) + ' // Montaje = ' + str(pos[1])
-                img = cv2.imread(cad)
-                cv2.imshow(texto, img)
-                if cv2.waitKey(0) & 0xFF == ord('y'):
-                    cv2.destroyAllWindows()
-                    previo = 'y'
-                    break;
-                cv2.destroyAllWindows()
-            else:
-                print('Base de datos vacia')
+                misImagenes.append(cad)
+        ## Main window
+    misNombres = list()
+
+    selectorGui = tkinter.Tk()
+    selectorGui.geometry("1500x800")
+    selectorGui.title("Selector Secuecial")
+    selectorGui.configure(background='LightBlue')
+    selectorGui.title("Selector Secuecial")
+    label1 = tkinter.Label(selectorGui, text="¿Es una de las siguientes la imagen deseada?", font=("Helvetica", 16),
+                           bg='LightBlue', anchor="w", justify="left")
+    label1.place(relx=0.5, rely=0.075, anchor="center")
+    cnv = tkinter.Canvas(selectorGui)
+    cnv.place(x=350, y=90, width=800, height=600)
+
+    ## Scrollbars for canvas
+    Scroll = tkinter.Scrollbar(selectorGui, orient="vertical", command=cnv.yview)
+    Scroll.pack(side="right", fill="y")
+    cnv.configure(yscrollcommand=Scroll.set)
+
+    ## Frame in canvas
+    frm = tkinter.Frame(cnv)
+    ## This puts the frame in the canvas's scrollable zone
+    cnv.create_window(0, 0, window=frm, anchor='nw')
+    ## Frame contents
+
+    for s in misImagenes:
+        texto = tkinter.StringVar()
+        miTexto = tkinter.Label(frm, textvariable=texto)
+        miNombre=s[10:]
+        misNombres.append(miNombre)
+        texto.set(miNombre)
+        miTexto.pack()
+        im = Image.open(s)
+        tkimage = ImageTk.PhotoImage(im)
+        myvar = tkinter.Label(frm, image=tkimage)
+        myvar.image = tkimage
+        myvar.pack()
+
+    ## Update display to get correct dimensions
+    frm.update_idletasks()
+    ## Configure size of canvas's scrollable zone
+    cnv.configure(scrollregion=(0, 0, frm.winfo_width(), frm.winfo_height()))
+    ## Go!
+    cuadroTexto = tkinter.Entry(selectorGui)
+    cuadroTexto.place(relx=0.33, rely=0.95, anchor="center")
+    boton1 = tkinter.Button(selectorGui, text="Continuar", bg='white', font=("Helvetica", 16), relief="ridge",
+                            command=lambda: [validarNombre(selectorGui, cuadroTexto, misNombres, opcion)])
+    boton1.place(relx=0.66, rely=0.95, anchor="center")
+    selectorGui.mainloop()
+
+
