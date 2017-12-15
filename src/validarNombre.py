@@ -1,6 +1,7 @@
 import tkinter
 
 from src.aleatorioConocido import aleatorioConocido
+from src.secuencialConocido import secuencialConocido
 
 
 def validarNombre(selectorGui,cuadroTexto,misNombres,opcion ):
@@ -10,8 +11,7 @@ def validarNombre(selectorGui,cuadroTexto,misNombres,opcion ):
     if check in misNombres:
         selectorGui.destroy()
         if opcion==0:
-            print("Montaje secuencial")
-            #secuencialConocido(check)
+            secuencialConocido(check,1)
         else:
             aleatorioConocido(check)
     elif len(check)==0:

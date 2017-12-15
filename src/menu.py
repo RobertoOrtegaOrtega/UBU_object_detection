@@ -1,16 +1,7 @@
-
-#Script principal
-import sqlite3
-import cv2
 import tkinter
 
 from src.selector import selector
 from src.showDB import showDB
-from src.compareObjects import compareObjects
-from src.compareObjects2 import compareObjects2
-from src.countObjects import countObject
-from src.objectDetection import objectDetection
-from src.takePhoto import takePhoto
 
 
 gui = tkinter.Tk()
@@ -34,47 +25,7 @@ gui.mainloop()
 
 
 
-
-while(True):
-    print('Bienvenido')
-    print('¿La pieza que desea supervisar tiene una fase de montaje predefinido?')
-    print('1.- Si, tiene unas fases establecidas las cuales son inmutables')
-    print('2.- No, la pieze puede ser montada como se desea, siempre que el resultado este bien')
-    print('3.- Salir')
-    opcion=0
-    while opcion<1 or opcion>3:
-        opcion = int(input('Introduce la opcion deseada'))
-
-    """if opcion==1:
-        tabla='DIFERENCIAS'
-        previo = 'n'
-        print('¿Es la pieza una de las siguientes?')
-        cursor = conexion.execute("SELECT DISTINCT MONTAJE FROM IMAGEN_SEQ")
-        for pos in cursor:
-            if pos != None:
-                print(pos[0])
-                maxID = conexion.execute("SELECT max(ID) FROM IMAGEN_SEQ WHERE MONTAJE LIKE ?;",(pos[0],))
-                for i in maxID:
-                    valID = i[0]
-                print(valID)
-                cursor2 = conexion.execute("SELECT NOMBRE FROM IMAGEN_SEQ  WHERE ID=?;", (valID,))
-                for pos2 in cursor2:
-                    print("¿Es esta pieza la que desea? ")
-                    print(pos2[0])
-                    cad = 'BaseDatos/' + str(pos2[0]) + '.png'
-                    nombre = str(pos[0])
-                    montaje = str(pos[0])
-                    texto = 'Nombre = ' + str(pos2[0]) + ' // Montaje = ' + str(pos[0])
-                    img = cv2.imread(cad)
-                    cv2.imshow(texto, img)
-                    if cv2.waitKey(0) & 0xFF == ord('y'):
-                        cv2.destroyAllWindows()
-                        previo = 'y'
-                        break;
-                    cv2.destroyAllWindows()
-            else:
-                print('Base de datos vacia')"""
-        if previo == 'n':
+"""if previo == 'n':
             print('montaje de prueba')
             conexion = sqlite3.connect(ruta)
             val = conexion.execute('''SELECT max(ID) FROM IMAGEN_SEQ;''')
@@ -163,27 +114,7 @@ while(True):
                     break;
 
             conexion.close()
-    """elif opcion==2:
-        tabla = 'OBJETO'
-        previo = 'n'
-        print('¿Es la pieza una de las siguientes?')
-        cursor = conexion.execute("SELECT nombre,montaje from IMAGEN_ALE")
-        for pos in cursor:
-            if pos != None:
-                print("¿Es esta pieza la que desea? ")
-                cad='BaseDatos/'+str(pos[0])+'.png'
-                nombre=str(pos[0])
-                montaje=str(pos[1])
-                texto='Nombre = ' +str(pos[0])+' // Montaje = '+str(pos[1])
-                img=cv2.imread(cad)
-                cv2.imshow(texto,img)
-                if cv2.waitKey(0) & 0xFF == ord('y'):
-                    cv2.destroyAllWindows()
-                    previo = 'y'
-                    break;
-                cv2.destroyAllWindows()
-            else:
-                print('Base de datos vacia')"""
+
         if previo == 'n':
             print('montaje de prueba')
             conexion = sqlite3.connect(ruta)
@@ -270,6 +201,4 @@ while(True):
                     break;
 
             conexion.close()
-            cv2.destroyAllWindows()
-    elif opcion == 3:
-        break;
+            cv2.destroyAllWindows()"""

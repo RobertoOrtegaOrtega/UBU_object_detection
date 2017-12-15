@@ -51,23 +51,18 @@ def selector(opcion):
     selectorGui.geometry("1500x800")
     selectorGui.title("Selector Secuecial")
     selectorGui.configure(background='LightBlue')
-    selectorGui.title("Selector Secuecial")
     label1 = tkinter.Label(selectorGui, text="¿Es una de las siguientes la imagen deseada?", font=("Helvetica", 16),
                            bg='LightBlue', anchor="w", justify="left")
     label1.place(relx=0.5, rely=0.075, anchor="center")
     cnv = tkinter.Canvas(selectorGui)
     cnv.place(x=350, y=90, width=800, height=600)
 
-    ## Scrollbars for canvas
     Scroll = tkinter.Scrollbar(selectorGui, orient="vertical", command=cnv.yview)
     Scroll.pack(side="right", fill="y")
     cnv.configure(yscrollcommand=Scroll.set)
 
-    ## Frame in canvas
     frm = tkinter.Frame(cnv)
-    ## This puts the frame in the canvas's scrollable zone
     cnv.create_window(0, 0, window=frm, anchor='nw')
-    ## Frame contents
 
     for s in misImagenes:
         texto = tkinter.StringVar()
@@ -82,11 +77,9 @@ def selector(opcion):
         myvar.image = tkimage
         myvar.pack()
 
-    ## Update display to get correct dimensions
     frm.update_idletasks()
-    ## Configure size of canvas's scrollable zone
+
     cnv.configure(scrollregion=(0, 0, frm.winfo_width(), frm.winfo_height()))
-    ## Go!
     cuadroTexto = tkinter.Entry(selectorGui)
     cuadroTexto.place(relx=0.33, rely=0.95, anchor="center")
     boton1 = tkinter.Button(selectorGui, text="Continuar", bg='white', font=("Helvetica", 16), relief="ridge",
