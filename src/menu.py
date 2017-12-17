@@ -2,8 +2,14 @@ import tkinter
 
 from src.selector import selector
 from src.showDB import showDB
+from os import listdir
+import os
 
 while True:
+    ruta='BaseDatos'
+    for cosa in listdir(ruta):
+        if cosa[:3]=='aux':
+            os.remove('BaseDatos/'+cosa)
     gui = tkinter.Tk()
     gui.geometry("1500x800")
     gui.title("Menu")
