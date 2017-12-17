@@ -35,6 +35,7 @@ def selector(opcion):
                 for pos2 in cursor2:
                     cad = 'BaseDatos/' + str(pos2[0]) + '.png'
                     misImagenes.append(cad)
+        print(cad)
     elif opcion == 1:
         tabla = 'OBJETO'
         previo = 'n'
@@ -44,12 +45,15 @@ def selector(opcion):
             if pos != None:
                 cad = 'BaseDatos/' + str(pos[0]) + '.png'
                 misImagenes.append(cad)
-        ## Main window
+        print(cad)
     misNombres = list()
 
     selectorGui = tkinter.Tk()
     selectorGui.geometry("1500x800")
-    selectorGui.title("Selector Secuecial")
+    if opcion==0:
+        selectorGui.title("Selector Secuecial")
+    else:
+        selectorGui.title("Selector Aleatorio")
     selectorGui.configure(background='LightBlue')
     label1 = tkinter.Label(selectorGui, text="¿Es una de las siguientes la imagen deseada?", font=("Helvetica", 16),
                            bg='LightBlue', anchor="w", justify="left")

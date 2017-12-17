@@ -7,6 +7,7 @@ from src.validarResultados import validarResultados
 
 
 def aleatorioConocido(nombre):
+    print("FLAAAAG")
     ok = True
     ruta = '../../UBU_object_detection/sqlite/Montajes'
     while ok:

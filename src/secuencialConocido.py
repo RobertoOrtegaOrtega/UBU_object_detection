@@ -1,5 +1,6 @@
 import sqlite3
 import tkinter
+import cv2
 
 from src.takePhoto import takePhoto
 from src.validarResultados import validarResultados
@@ -28,11 +29,13 @@ def secuencialConocido(nombre,fase):
     err = False
     for pos in cursor:
         texto = 'ID = ' + str(pos[0]) + ' // Nombre = ' + str(pos[1]) + ' // Montaje = ' + str(pos[2])
-        print(contFase)
-        print(fase)
-        print(texto)
-        takePhoto('auxFase'+str(contFase)+'.png')
+
         if contFase==fase:
+            print("Mi fase: " + str(contFase))
+            print(fase)
+            print(texto)
+            takePhoto('auxFase' + str(contFase) + '.png')
+            print(contFase)
             secuencialConocidoGui = tkinter.Tk()
             secuencialConocidoGui.geometry("1500x800")
             secuencialConocidoGui.title("Montaje Aleatorio")
@@ -58,7 +61,7 @@ def secuencialConocido(nombre,fase):
             label5.place(relx=0.7, rely=0.5, anchor="center")
             if contFase!=1:
                 boton1 = tkinter.Button(secuencialConocidoGui, text="Si", bg='white', font=("Helvetica", 16), relief="ridge",
-                                        command=lambda: [secuencialConocidoGui.destroy(), secuencialConocido(nombre,fase+1)])
+                                        command=lambda: [secuencialConocidoGui.destroy(),validarResultados(montaje, 1, contFase), secuencialConocido(nombre,fase+1)])
                 boton1.place(relx=0.4, rely=0.85, anchor="center")
                 boton2 = tkinter.Button(secuencialConocidoGui, text="No", bg='white', font=("Helvetica", 16), relief="ridge",
                                         command=lambda: [secuencialConocidoGui.destroy(), secuencialConocido(nombre,fase)])
@@ -76,6 +79,5 @@ def secuencialConocido(nombre,fase):
                 boton2.place(relx=0.6, rely=0.85, anchor="center")
 
             secuencialConocidoGui.mainloop()
-            break
         contFase=contFase+1
     conexion.close()

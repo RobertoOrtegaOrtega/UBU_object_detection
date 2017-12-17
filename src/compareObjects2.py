@@ -52,7 +52,7 @@ def compareObjects2(imagenBase, imagenBuscar):
 
     img3 = cv2.drawMatches(imagenCL1, puntos1, imagenCL2, puntos2, aciertos_validos, None, **draw_params)
 
-    """cv2.imshow('diferencias',img3)
-    cv2.waitKey(0)"""
+    cv2.imshow('diferencias',img3)
+    cv2.waitKey(0)
 
     return len(aciertos_validos)
