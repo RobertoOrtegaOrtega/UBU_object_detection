@@ -79,48 +79,7 @@ while True:
                     contFase=contFase+1
                 else:
                     flag=False
-        else:
-            conexion = sqlite3.connect(ruta)
-            cursor = conexion.execute("SELECT ID,NOMBRE,MONTAJE FROM IMAGEN_SEQ WHERE MONTAJE=?;", (montaje,))
-            contFase=1
-            err=False
-            for pos in cursor:
-                texto = 'ID = ' + str(pos[0]) + ' // Nombre = ' + str(pos[1]) + ' // Montaje = ' + str(pos[2])
-                print(texto)
-                ok = True
-                while ok:
-                    takePhoto('aux1.png')
-                    img=cv2.imread('BaseDatos/aux1.png')
-                    cv2.imshow('imagen camara',img)
-                    if cv2.waitKey(0) & 0xFF == ord('s'):
-                        cv2.destroyAllWindows()
-                        ok=False
-                if contFase != 1:
-                    salida = 'auxdif'
-                    compareObjects('aux1', 'aux2', salida)
-                    objectDetection(salida, montaje, 'NONE')
-                    if 1 == countObject(salida, 'aux1', montaje, 'NONE'):
-                        print('Analizo diferencias')
-                        busqueda = 'dif'+ str(contFase-1)+'_'+str(contFase)+montaje + '_%'
-                        cursor = conexion.execute("SELECT NOMBRE FROM DIFERENCIAS WHERE NOMBRE LIKE ?;", (busqueda,))
-                        for pos in cursor:
-                            texto = 'nombre = ' + str(pos[0])
-                            print('comparo '+texto)
-                            aciertos = compareObjects2('auxdif', str(pos[0]))
-                            if aciertos < 15:
-                                validar = input('¿Es pese a todo la imagen valida? (s/n)')
-                                if validar=='n':
-                                    err=True
-                if err==False:
-                    img=cv2.imread('BaseDatos/aux1.png')
-                    cv2.imwrite('BaseDatos/aux2.png',img)
-                    contFase=contFase+1
-                else:
-                    print('Montaje erroneo')
-                    break;
-
-            conexion.close()
-
+    
         if previo == 'n':
             print('montaje de prueba')
             conexion = sqlite3.connect(ruta)
@@ -160,51 +119,4 @@ while True:
                 cont=cont+1
             conexion.close()
             #comparar objeto por objeto
-        else:
-            ok = True
-            while ok:
-                takePhoto('aux0.png')
-                img = cv2.imread('BaseDatos/aux0.png')
-                cv2.imshow('imagen camara', img)
-                if cv2.waitKey(0) & 0xFF == ord('s'):
-                    cv2.destroyAllWindows()
-                    ok = False
-            objectDetection('aux0', montaje, 'NONE1')
-            objetos = countObject('auxObjetos','aux0', montaje, 'NONE1')
-            conexion = sqlite3.connect(ruta)
-            cursor = conexion.execute("SELECT NOMBRE FROM OBJETO WHERE MONTAJE=?;",(montaje,))
-            cont=0
-            err=False
-            for i in cursor:
-                if cont != 0:
-                    maxAciertos=0
-                    for j in range(objetos):
-                        print(i[0]+'.png')
-                        miobj='auxObjeto_'+str(j+1)
-                        print(miobj)
-                        aciertos=compareObjects2(miobj, i[0])
-                        print(aciertos)
-                        if aciertos>maxAciertos:
-                            maxAciertos=aciertos
-                            miobjMax=miobj
-
-                    print(maxAciertos)
-                    print(miobjMax)
-                    print(i[0])
-                    img1=cv2.imread('BaseDatos/'+miobjMax+'.png')
-                    img2=cv2.imread('BaseDatos/' +i[0]+'.png')
-                    cv2.imshow('objeto1',img1)
-                    cv2.imshow('objeto2', img2)
-                    cv2.waitKey(0)
-                    if maxAciertos < 8:
-                        validar = input('¿Es pese a todo la imagen valida? (s/n)')
-                        if validar == 'n':
-                            err = True
-                if err == False:
-                    cont = cont + 1
-                else:
-                    print('Montaje erroneo')
-                    break;
-
-            conexion.close()
-            cv2.destroyAllWindows()"""
+        """

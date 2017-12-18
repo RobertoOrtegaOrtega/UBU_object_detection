@@ -19,8 +19,8 @@ def aleatorioConocido(nombre):
             print("Oops! Base de datos inexsitente, compruebe la ruta e introduzca una nueva")
             print('Ruta: ' + ruta)
             ruta = input('Introduce ruta')
-    print(nombre[:len(nombre)-4])
-    aux = conexion.execute("SELECT MONTAJE FROM IMAGEN_ALE WHERE NOMBRE=?;", (nombre[:len(nombre)-4],))
+    print(nombre[10:len(nombre)-4])
+    aux = conexion.execute("SELECT MONTAJE FROM IMAGEN_ALE WHERE NOMBRE=?;", (nombre[10:len(nombre)-4],))
     for i in aux:
         montaje = str(i[0])
         print("Mi montaje "+montaje)
@@ -44,8 +44,7 @@ def aleatorioConocido(nombre):
     label4 = tkinter.Label(image=foto1)
     label4.image = foto1
     label4.place(relx=0.3, rely=0.5, anchor="center")
-    rutaFoto='BaseDatos/'+nombre
-    foto2 = tkinter.PhotoImage(file=rutaFoto)
+    foto2 = tkinter.PhotoImage(file=nombre)
     label5 = tkinter.Label(image=foto2)
     label5.image = foto2
     label5.place(relx=0.7, rely=0.5, anchor="center")

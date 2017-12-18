@@ -7,6 +7,7 @@ from src.validarNombre import validarNombre
 
 
 def selector(opcion):
+    conocido=0
     ok = True
     ruta = '../../UBU_object_detection/sqlite/Montajes'
     while ok:
@@ -21,8 +22,6 @@ def selector(opcion):
 
     misImagenes = list()
     if opcion==0:
-        tabla='DIFERENCIAS'
-        previo = 'n'
         cursor = conexion.execute("SELECT DISTINCT MONTAJE FROM IMAGEN_SEQ")
         for pos in cursor:
             if pos != None:
@@ -35,18 +34,20 @@ def selector(opcion):
                 for pos2 in cursor2:
                     cad = 'BaseDatos/' + str(pos2[0]) + '.png'
                     misImagenes.append(cad)
+            else:
+                print("Base datos vadia")
         print(cad)
     elif opcion == 1:
-        tabla = 'OBJETO'
-        previo = 'n'
         print('¿Es la pieza una de las siguientes?')
         cursor = conexion.execute("SELECT nombre,montaje from IMAGEN_ALE")
         for pos in cursor:
             if pos != None:
                 cad = 'BaseDatos/' + str(pos[0]) + '.png'
+                print(cad)
                 misImagenes.append(cad)
+            else:
+                print("Base datos vadia")
         print(cad)
-    misNombres = list()
 
     selectorGui = tkinter.Tk()
     selectorGui.geometry("1500x800")
@@ -69,26 +70,24 @@ def selector(opcion):
     cnv.create_window(0, 0, window=frm, anchor='nw')
 
     for s in misImagenes:
-        texto = tkinter.StringVar()
-        miTexto = tkinter.Label(frm, textvariable=texto)
-        miNombre=s[10:]
-        misNombres.append(miNombre)
-        texto.set(miNombre)
-        miTexto.pack()
+        print(s)
         im = Image.open(s)
         tkimage = ImageTk.PhotoImage(im)
-        myvar = tkinter.Label(frm, image=tkimage)
-        myvar.image = tkimage
-        myvar.pack()
+        button = tkinter.Button(frm, image=tkimage,command=lambda: [validarNombre(selectorGui, s, opcion)])
+        button.image = tkimage
+        button.pack()
 
     frm.update_idletasks()
 
     cnv.configure(scrollregion=(0, 0, frm.winfo_width(), frm.winfo_height()))
-    cuadroTexto = tkinter.Entry(selectorGui)
-    cuadroTexto.place(relx=0.33, rely=0.95, anchor="center")
-    boton1 = tkinter.Button(selectorGui, text="Continuar", bg='white', font=("Helvetica", 16), relief="ridge",
-                            command=lambda: [validarNombre(selectorGui, cuadroTexto, misNombres, opcion)])
-    boton1.place(relx=0.66, rely=0.95, anchor="center")
+    if opcion==0:
+        nuevoNombre=""
+    else:
+        nuevoNombre = 'FaseFinal_'+str(int(misImagenes[len(misImagenes)-1][20:21])+1)
+        conocido=1
+    boton1 = tkinter.Button(selectorGui, text="Nuevo Montaje", bg='white', font=("Helvetica", 16), relief="ridge",
+                            command=lambda: [validarNombre(selectorGui, nuevoNombre, opcion,conocido)])
+    boton1.place(relx=0.5, rely=0.95, anchor="center")
     selectorGui.mainloop()
 
 
