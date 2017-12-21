@@ -1,42 +1,30 @@
-import sqlite3
-import cv2
+import tkinter
 
+from src.finalizarMontaje import finalizarMontaje
 from src.takePhoto import takePhoto
 
 
 def aleatorioNuevo(nombre):
-    ruta = '../../UBU_object_detection/sqlite/Montajes'
-    ok = True
-    while ok:
-        try:
-            conexion = sqlite3.connect(ruta)
-            ok = False
-        except sqlite3.Error:
-            ok = True
-            print("Oops! Base de datos inexsitente, compruebe la ruta e introduzca una nueva")
-            print('Ruta: ' + ruta)
-            ruta = input('Introduce ruta')
     print('montaje de prueba')
     print(nombre)
     montaje = 'Montaje' + str(nombre[len(nombre)-1:])
     print(montaje)
     takePhoto(nombre + '.png')
-    conexion.execute('''INSERT INTO IMAGEN_ALE VALUES (?,?,?)''', (nombre[len(nombre)-1:], nombre, montaje))
-    conexion.commit()
-    conexion.close()
-    """objectDetection(nombre, montaje, tabla)
-    objetos = countObject('objetos' + montaje, nombre, montaje, tabla)
-    conexion = sqlite3.connect(ruta)
-    cursor = conexion.execute("SELECT NOMBRE FROM OBJETO WHERE MONTAJE=?;", (montaje,))
-    cont = 0
-    for i in cursor:
-        if cont != 0:
-            print(i[0] + '.png')
-            aciertos = compareObjects2(nombre, i[0])
-            if aciertos > 15:
-                print("Pieza encontrada")
-            else:
-                print("Pieza NO encontrada")
-        cont = cont + 1
-    conexion.close()
-    # comparar objeto por objeto"""
+
+    aleatorioNuevoGUI= tkinter.Tk()
+    aleatorioNuevoGUI.geometry("1500x800")
+    aleatorioNuevoGUI.configure(background='LightBlue')
+
+    label1 = tkinter.Label(aleatorioNuevoGUI, text="¿Es la foto válida?", font=("Helvetica", 16),
+                           bg='LightBlue', anchor="w", justify="left")
+    label1.place(relx=0.5, rely=0.075, anchor="center")
+    foto = tkinter.PhotoImage(file='BaseDatos/' + nombre + '.png')
+    label2 = tkinter.Label(image=foto)
+    label2.image = foto
+    label2.place(relx=0.5, rely=0.5, anchor="center")
+    button = tkinter.Button(aleatorioNuevoGUI, text="SI", command=lambda: [aleatorioNuevoGUI.destroy(), finalizarMontaje(nombre,str(nombre[len(nombre)-1:])
+                                                                                                                         ,1)])
+    button.place(relx=0.33, rely=0.85, anchor="center")
+    button1 = tkinter.Button(aleatorioNuevoGUI, text="NO", command=lambda: [aleatorioNuevoGUI.destroy(),aleatorioNuevo(nombre)])
+    button1.place(relx=0.66, rely=0.85, anchor="center")
+    aleatorioNuevoGUI.mainloop()

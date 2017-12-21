@@ -18,6 +18,18 @@ def showDB():
             print("Oops! Base de datos inexsitente, compruebe la ruta e introduzca una nueva")
             print('Ruta: ' + ruta)
             ruta = input('Introduce ruta')
+    """conexion.execute("DELETE from IMAGEN_ALE where MONTAJE=?;", ('Montaje5',))
+    conexion.commit()
+    conexion.execute("DELETE from OBJETO where MONTAJE=?;", ('Montaje5',))
+    conexion.commit()"""
+    print("imagen ale")
+    cursor = conexion.execute("SELECT * FROM IMAGEN_ALE;")
+    for pos in cursor:
+        print(str(pos[0])+str(pos[1])+str(pos[2]))
+    print("objeto")
+    cursor = conexion.execute("SELECT * FROM OBJETO;")
+    for pos in cursor:
+        print(str(pos[0]) + str(pos[1]) + str(pos[2]))
     """conexion.execute('''INSERT INTO IMAGEN_ALE VALUES (?,?,?)''', (1, 'FaseFinal_1', 'Montaje1'));
     conexion.commit()
     conexion.execute('''INSERT INTO IMAGEN_ALE VALUES (?,?,?)''', (2, 'FaseFinal_2', 'Montaje2'));
@@ -163,12 +175,12 @@ def showDB():
 
     for s in listaDatos:
         print(s)
-        button = tkinter.Button(frm,text=s,command=lambda: [showDBGui.destroy(),  mostrarImagen(s, 1)])
+        button = tkinter.Button(frm,text=s,command=lambda s=s: [showDBGui.destroy(),  mostrarImagen(s, 1)])
         button.pack()
 
     for s in listaDatos1:
         print(s)
-        button = tkinter.Button(frm1, text=s,command=lambda: [showDBGui.destroy(), mostrarImagen(s, 0)])
+        button = tkinter.Button(frm1, text=s,command=lambda s=s: [showDBGui.destroy(), mostrarImagen(s, 0)])
         button.pack()
 
     frm.update_idletasks()

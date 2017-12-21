@@ -19,7 +19,8 @@ def secuencialConocido(nombre,fase):
             print('Ruta: ' + ruta)
             ruta = input('Introduce ruta')
     conexion = sqlite3.connect(ruta)
-    aux = conexion.execute("SELECT MONTAJE FROM IMAGEN_SEQ WHERE NOMBRE=?;", (nombre[:len(nombre) - 4],))
+    print(nombre[len('BaseDatos/'):len(nombre) - 4])
+    aux = conexion.execute("SELECT MONTAJE FROM IMAGEN_SEQ WHERE NOMBRE=?;", (nombre[len('BaseDatos/'):len(nombre) - 4],))
     for i in aux:
         montaje = str(i[0])
         print("Mi montaje " + montaje)

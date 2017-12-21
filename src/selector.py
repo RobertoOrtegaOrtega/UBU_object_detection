@@ -7,7 +7,6 @@ from src.validarNombre import validarNombre
 
 
 def selector(opcion):
-    conocido=0
     ok = True
     ruta = '../../UBU_object_detection/sqlite/Montajes'
     while ok:
@@ -70,10 +69,9 @@ def selector(opcion):
     cnv.create_window(0, 0, window=frm, anchor='nw')
 
     for s in misImagenes:
-        print(s)
         im = Image.open(s)
         tkimage = ImageTk.PhotoImage(im)
-        button = tkinter.Button(frm, image=tkimage,command=lambda: [validarNombre(selectorGui, s, opcion)])
+        button = tkinter.Button(frm, image=tkimage,command=lambda s=s: [validarNombre(selectorGui, s, opcion,0)])
         button.image = tkimage
         button.pack()
 
@@ -81,12 +79,14 @@ def selector(opcion):
 
     cnv.configure(scrollregion=(0, 0, frm.winfo_width(), frm.winfo_height()))
     if opcion==0:
-        nuevoNombre=""
+        aux=str(misImagenes[len(misImagenes)-1])
+        nuevoNombre=str(int(aux[len(aux)-5])+1)
+
+
     else:
         nuevoNombre = 'FaseFinal_'+str(int(misImagenes[len(misImagenes)-1][20:21])+1)
-        conocido=1
     boton1 = tkinter.Button(selectorGui, text="Nuevo Montaje", bg='white', font=("Helvetica", 16), relief="ridge",
-                            command=lambda: [validarNombre(selectorGui, nuevoNombre, opcion,conocido)])
+                            command=lambda: [validarNombre(selectorGui, nuevoNombre, opcion,1)])
     boton1.place(relx=0.5, rely=0.95, anchor="center")
     selectorGui.mainloop()
 

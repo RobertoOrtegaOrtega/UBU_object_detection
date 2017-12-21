@@ -21,7 +21,6 @@ def validarResultados(montaje,opcion,contFase):
             print('Ruta: ' + ruta)
             ruta = input('Introduce ruta')
     if opcion==0:
-        ok = True
         objectDetection('aux0', montaje, 'NONE1')
         num=conexion.execute("SELECT count(NOMBRE) FROM OBJETO WHERE MONTAJE=?;", (montaje,))
         for n in num:
@@ -33,7 +32,6 @@ def validarResultados(montaje,opcion,contFase):
         cursor = conexion.execute("SELECT NOMBRE FROM OBJETO WHERE MONTAJE=?;", (montaje,))
 
         cont = 0
-        err = False
         for i in cursor:
             if cont != 0:
                 maxAciertos = 0
@@ -52,17 +50,17 @@ def validarResultados(montaje,opcion,contFase):
                 validarResultadosGui.geometry("1500x800")
                 validarResultadosGui.title("Montaje Aleatorio")
                 validarResultadosGui.configure(background='LightBlue')
-                label1 = tkinter.Label(validarResultadosGui, text="¿Es la foto tomada valida?\n", font=("Helvetica", 16),
+                label1 = tkinter.Label(validarResultadosGui, text="¿Es el objeto valido?\n", font=("Helvetica", 16),
                                        bg='LightBlue')
                 label1.place(relx=0.5, rely=0.1, anchor="center")
                 if maxAciertos<8:
                     labelError = tkinter.Label(validarResultadosGui, text="Alerta: Porcentaje de aciertos demasiado bajo\n", font=("Helvetica", 16),
                                            bg='LightBlue',fg="red")
                     labelError.place(relx=0.5, rely=0.15, anchor="center")
-                label2 = tkinter.Label(validarResultadosGui, text="Imagen camara\n", font=("Helvetica", 16),
+                label2 = tkinter.Label(validarResultadosGui, text="Objeto encontrado\n", font=("Helvetica", 16),
                                        bg='LightBlue')
                 label2.place(relx=0.3, rely=0.2, anchor="center")
-                label3 = tkinter.Label(validarResultadosGui, text="Imagen ideal\n", font=("Helvetica", 16),
+                label3 = tkinter.Label(validarResultadosGui, text="Objeto original\n", font=("Helvetica", 16),
                                        bg='LightBlue')
                 label3.place(relx=0.7, rely=0.2, anchor="center")
                 rutaFoto1='BaseDatos/' + miobjMax + '.png'
@@ -88,7 +86,7 @@ def validarResultados(montaje,opcion,contFase):
         conexion.close()
     else:
         print("contador Fase: "+str(contFase))
-        salida = 'auxdif'
+        salida = 'auxdif'+str(contFase-2)
         foto1='auxFase'+str(contFase-1)
         foto2 = 'auxFase' + str(contFase)
         compareObjects(foto1, foto2, salida)
@@ -96,7 +94,9 @@ def validarResultados(montaje,opcion,contFase):
         while 1!=countObject(salida, foto2, montaje, 'NONE'):
             print("error")
         busqueda = 'dif' + str(contFase - 1) + '_' + str(contFase) + montaje + '_1'
-        aciertos = compareObjects2('auxdif', busqueda)
+        aciertos = compareObjects2(salida+'_0', busqueda)
+        foto1 = salida+'_0'
+        foto2 = busqueda
         validarResultadosGui = tkinter.Tk()
         validarResultadosGui.geometry("1500x800")
         validarResultadosGui.title("Montaje Seciencial")

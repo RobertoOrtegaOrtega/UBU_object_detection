@@ -47,7 +47,6 @@ def objectDetection(imagen,montaje,tabla):
                 print("Oops! Base de datos inexsitente, compruebe la ruta e introduzca una nueva")
                 print('Ruta: ' + ruta)
                 ruta = input('Introduce ruta')
-        # conexion.execute('''DELETE FROM OBJETO WHERE ID=10;''');
         val = conexion.execute('''SELECT max(ID) FROM {};'''.format(tabla))
         for i in val:
             if i[0] == None:
@@ -72,7 +71,6 @@ def objectDetection(imagen,montaje,tabla):
                 print("Oops! Base de datos inexsitente, compruebe la ruta e introduzca una nueva")
                 print('Ruta: ' + ruta)
                 ruta = input('Introduce ruta')
-        # conexion.execute('''DELETE FROM OBJETO WHERE ID=10;''');
         val = conexion.execute('''SELECT max(ID) FROM {};'''.format(tabla))
         for i in val:
             if i[0] == None:

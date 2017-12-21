@@ -7,14 +7,22 @@ def compareObjects2(imagenBase, imagenBuscar):
     CONCORDANCIA_MINIMA = 10
     imagenCL1 = cv2.imread('BaseDatos/'+imagenBase+'.png') # imagen base
     imagenCL2 = cv2.imread('BaseDatos/'+imagenBuscar+'.png') # imagen a buscar
-    cv2.destroyAllWindows()
+    """cv2.imshow('IMG1', imagenCL1)
+    cv2.imshow('IMG2', imagenCL2)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()"""
     imagen1 = cv2.cvtColor(imagenCL1, cv2.COLOR_BGR2GRAY)
     imagen2 = cv2.cvtColor(imagenCL2, cv2.COLOR_BGR2GRAY)
+    """cv2.imshow('IMG1', imagen1)
+    cv2.imshow('IMG2', imagen2)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()"""
 
     sift = cv2.xfeatures2d.SIFT_create()
 
     puntos1, descripcion1 = sift.detectAndCompute(imagen1, None)
     puntos2, descripcion2 = sift.detectAndCompute(imagen2, None)
+
 
     FLANN_INDEX_KDTREE = 0
     indices_parametros = dict(algorithm = FLANN_INDEX_KDTREE, trees = 8)
@@ -54,5 +62,7 @@ def compareObjects2(imagenBase, imagenBuscar):
 
     cv2.imshow('diferencias',img3)
     cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
 
     return len(aciertos_validos)
