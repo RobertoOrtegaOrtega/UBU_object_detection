@@ -1,3 +1,10 @@
+#autor:Roberto Ortega Ortega
+
+"""finalizarMontaje:
+Dado un nombre de una pieza, obtendra a que montaje pertence y
+mostrará en una ventana como es el montaje final de esa pieza y
+al lado de esta como es la pieza que se esta montando en este momento"""
+
 import sqlite3
 
 from src.compareObjects import compareObjects

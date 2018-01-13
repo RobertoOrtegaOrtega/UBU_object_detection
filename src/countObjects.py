@@ -1,18 +1,27 @@
+# autor:Roberto Ortega Ortega
+
+"""countObjects:
+algoritmo que separa los objetos, les recorta, y les guarada por separado """
 
 import cv2
 import sqlite3
 import tkinter
 import os
+
+
 contornoOk=0
 def countObject(imagen1,imagen2,montaje,tabla):
+
     global  contornoOk
     contornoOk=0
+
+    #cargo la imagen original los contornos de la misma
     img1 = cv2.imread('BaseDatos/'+imagen1+'.png', 0)
     img1 = cv2.bitwise_not(img1)
     img2 = cv2.imread('BaseDatos/'+imagen2+'.png')
     (_, contornos, _) = cv2.findContours(img1,cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    # dibuja borde
 
+    #abro la base de datos
     ruta = '../../UBU_object_detection/sqlite/Montajes'
     ok = True
     while ok:
@@ -24,13 +33,16 @@ def countObject(imagen1,imagen2,montaje,tabla):
             print("Oops! Base de datos inexsitente, compruebe la ruta e introduzca una nueva")
             print('Ruta: ' + ruta)
             ruta = input('Introduce ruta')
+    #recorro los contornos
     for c in contornos:
         area = cv2.contourArea(c)
         if area > 500:
             (x, y, w, h) = cv2.boundingRect(c)
+
+            #montajes aleatorios nuevos
             if tabla=='OBJETO':
-                print("yeeeeeeeeeeee")
                 nombre="objeto"+str(contornoOk+1)+montaje
+                #extraigo el id
                 val = conexion.execute('''SELECT max(ID) FROM {};'''.format(tabla))
                 for i in val:
                     if i[0] == None:
@@ -38,7 +50,10 @@ def countObject(imagen1,imagen2,montaje,tabla):
                     else:
                         val = i[0] + 1
 
+                #guardo la imagen recortada
                 cv2.imwrite('BaseDatos/'+nombre+'.png', img2[y:y + h, x:x + w])
+
+                #creo la ventana interfaz
                 countGui = tkinter.Tk()
                 countGui.geometry("1500x800")
                 countGui.title("Montaje Aleatorio")
@@ -65,7 +80,10 @@ def countObject(imagen1,imagen2,montaje,tabla):
                                         command=lambda: [countGui.destroy()])
                 boton2.place(relx=0.6, rely=0.85, anchor="center")
                 countGui.mainloop()
+
+            # montajes secuenciales nuevos
             elif tabla == 'DIFERENCIAS':
+                #extraigo id
                 conexion = sqlite3.connect(r'C:\Users\Roberto\PycharmProjects\UBU_object_detection\sqlite\Montajes')
                 val = conexion.execute('''SELECT max(ID) FROM {};'''.format(tabla))
                 for i in val:
@@ -74,8 +92,11 @@ def countObject(imagen1,imagen2,montaje,tabla):
                     else:
                         val = i[0] + 1
                 nombre = imagen1 + '_1'
-                print(nombre)
+
+                #guardo la imagen recortada
                 cv2.imwrite('BaseDatos/' + nombre+'.png', img2[y:y + h, x:x + w])
+
+                #creo la ventana interfaz
                 countGui = tkinter.Tk()
                 countGui.geometry("1500x800")
                 countGui.title("Montaje Aleatorio")
@@ -102,6 +123,8 @@ def countObject(imagen1,imagen2,montaje,tabla):
                                         command=lambda: [countGui.destroy()])
                 boton2.place(relx=0.6, rely=0.85, anchor="center")
                 countGui.mainloop()
+
+            #montaje aleatorio conocido
             elif tabla=='NONE':
                 nombre = imagen1 + '_' + str(contornoOk)
                 print(nombre)
@@ -141,6 +164,8 @@ def countObject(imagen1,imagen2,montaje,tabla):
                                         command=lambda: [countGui.destroy()])
                 boton2.place(relx=0.6, rely=0.85, anchor="center")
                 countGui.mainloop()
+
+            #montaje secuencial conocido
             else:
                 nombre = 'auxObjeto_' + str(contornoOk+1)
                 cv2.imwrite('BaseDatos/' + nombre + '.png', img2[y:y + h, x:x + w])
@@ -183,13 +208,16 @@ def countObject(imagen1,imagen2,montaje,tabla):
     print("He encontrado %d objetos" %contornoOk)
     return contornoOk
 
+"""incremento de contador"""
 def incrementaObj():
     global contornoOk
     contornoOk=contornoOk+1
 
+"""elimino imagenes erroneas"""
 def eliminaObj(ruta):
     os.remove(ruta)
 
+"""introduzco imagenes en base de datos"""
 def introducirDato(val,nombre,montaje,opcion):
     print("Dato Introducido")
     ruta = '../../UBU_object_detection/sqlite/Montajes'

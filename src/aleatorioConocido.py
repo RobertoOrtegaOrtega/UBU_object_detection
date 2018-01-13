@@ -1,13 +1,20 @@
+#autor:Roberto Ortega Ortega
 
-from src.takePhoto import takePhoto
+"""aleatorioConocido:
+Dado un nombre de una pieza, obtendra a que montaje pertence y
+mostrará en una ventana como es el montaje final de esa pieza y
+al lado de esta como es la pieza que se esta montando en este momento"""
+
 import sqlite3
 import tkinter
 
+from src.takePhoto import takePhoto
 from src.validarResultados import validarResultados
 
 
 def aleatorioConocido(nombre):
-    print("FLAAAAG")
+
+    #apertura de la base de datos
     ok = True
     ruta = '../../UBU_object_detection/sqlite/Montajes'
     while ok:
@@ -19,13 +26,15 @@ def aleatorioConocido(nombre):
             print("Oops! Base de datos inexsitente, compruebe la ruta e introduzca una nueva")
             print('Ruta: ' + ruta)
             ruta = input('Introduce ruta')
-    print(nombre[10:len(nombre)-4])
+
+    #extracion del montaje de la pieza introducida
     aux = conexion.execute("SELECT MONTAJE FROM IMAGEN_ALE WHERE NOMBRE=?;", (nombre[10:len(nombre)-4],))
     for i in aux:
         montaje = str(i[0])
-        print("Mi montaje "+montaje)
     takePhoto('aux0.png')
     conexion.close()
+
+    #interfaz gráfica
     aleatorioConocidoGui = tkinter.Tk()
     aleatorioConocidoGui.geometry("1500x800")
     aleatorioConocidoGui.title("Montaje Aleatorio")

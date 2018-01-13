@@ -74,16 +74,17 @@ def validarResultados(montaje,opcion,contFase):
                 label5.image = foto2
                 label5.place(relx=0.7, rely=0.5, anchor="center")
 
-                boton1 = tkinter.Button(validarResultadosGui, text="Si", bg='white', font=("Helvetica", 16), relief="ridge",
+                boton1 = tkinter.Button(validarResultadosGui, text="Sigiente", bg='white', font=("Helvetica", 16), relief="ridge",
                                         command=lambda: [validarResultadosGui.destroy()])
                 boton1.place(relx=0.5, rely=0.85, anchor="center")
-                boton2 = tkinter.Button(validarResultadosGui, text="No", bg='white', font=("Helvetica", 16), relief="ridge",
-                                        command=lambda: [validarResultadosGui.destroy()])
-                boton2.place(relx=0.6, rely=0.85, anchor="center")
+
 
                 validarResultadosGui.mainloop()
             cont=cont+1
         conexion.close()
+
+
+
     else:
         print("contador Fase: "+str(contFase))
         salida = 'auxdif'+str(contFase-2)
@@ -126,12 +127,9 @@ def validarResultados(montaje,opcion,contFase):
         label5.image = foto2
         label5.place(relx=0.7, rely=0.5, anchor="center")
 
-        boton1 = tkinter.Button(validarResultadosGui, text="Si", bg='white', font=("Helvetica", 16), relief="ridge",
+        boton1 = tkinter.Button(validarResultadosGui, text="Siguiente", bg='white', font=("Helvetica", 16), relief="ridge",
                                 command=lambda: [validarResultadosGui.destroy()])
-        boton1.place(relx=0.4, rely=0.85, anchor="center")
-        boton2 = tkinter.Button(validarResultadosGui, text="No", bg='white', font=("Helvetica", 16), relief="ridge",
-                                command=lambda: [validarResultadosGui.destroy()])
-        boton2.place(relx=0.6, rely=0.85, anchor="center")
+        boton1.place(relx=0.5, rely=0.85, anchor="center")
 
         validarResultadosGui.mainloop()
 

@@ -1,3 +1,10 @@
+#autor:Roberto Ortega Ortega
+
+"""aleatorioNuevo:
+Dado un nombre de una pieza, obtendrá una foto tomada con la cámara,
+la cual tendrá el nombre dado anteriormente. Además la mostrará en una
+interfaz y preguntara si es válida"""
+
 import tkinter
 
 from src.finalizarMontaje import finalizarMontaje
@@ -5,12 +12,11 @@ from src.takePhoto import takePhoto
 
 
 def aleatorioNuevo(nombre):
-    print('montaje de prueba')
-    print(nombre)
-    montaje = 'Montaje' + str(nombre[len(nombre)-1:])
-    print(montaje)
+
+    #toma de la foto
     takePhoto(nombre + '.png')
 
+    # creacion de interfaz gráfica
     aleatorioNuevoGUI= tkinter.Tk()
     aleatorioNuevoGUI.geometry("1500x800")
     aleatorioNuevoGUI.configure(background='LightBlue')
