@@ -11,7 +11,6 @@ import os
 
 contornoOk=0
 def countObject(imagen1,imagen2,montaje,tabla):
-
     global  contornoOk
     contornoOk=0
 
@@ -127,7 +126,6 @@ def countObject(imagen1,imagen2,montaje,tabla):
             #montaje aleatorio conocido
             elif tabla=='NONE':
                 nombre = imagen1 + '_' + str(contornoOk)
-                print(nombre)
                 cv2.imwrite('BaseDatos/'+nombre+'.png', img2[y:y + h, x:x + w])
                 rutaFoto2 = 'BaseDatos/dif' + str(int(imagen2[len(imagen2)-1])-1)+'_'+str(int(imagen2[len(imagen2)-1]))+montaje+'_1.png'
                 countGui = tkinter.Tk()
@@ -205,7 +203,6 @@ def countObject(imagen1,imagen2,montaje,tabla):
                 boton2.place(relx=0.6, rely=0.85, anchor="center")
                 countGui.mainloop()
     #conexion.close()
-    print("He encontrado %d objetos" %contornoOk)
     return contornoOk
 
 """incremento de contador"""

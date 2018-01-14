@@ -1,6 +1,12 @@
+#autor:Roberto Ortega Ortega
+
+"""validarResultados:
+evalua los resultados obtenidos de nuevo montajes y los compara
+con los montajes ya aprendidos"""
+
 import sqlite3
 import tkinter
-import cv2
+
 
 from src.compareObjects import compareObjects
 from src.compareObjects2 import compareObjects2
@@ -20,12 +26,13 @@ def validarResultados(montaje,opcion,contFase):
             print("Oops! Base de datos inexsitente, compruebe la ruta e introduzca una nueva")
             print('Ruta: ' + ruta)
             ruta = input('Introduce ruta')
+
+    #opcion montaje aleatorio
     if opcion==0:
         objectDetection('aux0', montaje, 'NONE1')
         num=conexion.execute("SELECT count(NOMBRE) FROM OBJETO WHERE MONTAJE=?;", (montaje,))
         for n in num:
             num=n[0]-1
-        print(num)
         while num != countObject('auxObjetos', 'aux0', montaje, 'NONE1'):
             print("Error")
         conexion = sqlite3.connect(ruta)
@@ -39,13 +46,10 @@ def validarResultados(montaje,opcion,contFase):
                 for j in range(num):
                     print(i[0] + '.png')
                     miobj = 'auxObjeto_' + str(j + 1)
-                    print(miobj)
                     aciertos = compareObjects2(miobj, i[0])
-                    print(aciertos)
                     if aciertos > maxAciertos:
                         maxAciertos = aciertos
                         miobjMax = miobj
-                print("Max: "+str(maxAciertos) +"->"+miobjMax+"//"+i[0] + '.png')
                 validarResultadosGui = tkinter.Tk()
                 validarResultadosGui.geometry("1500x800")
                 validarResultadosGui.title("Montaje Aleatorio")
@@ -83,10 +87,8 @@ def validarResultados(montaje,opcion,contFase):
             cont=cont+1
         conexion.close()
 
-
-
+    #opcion montaje secuencial
     else:
-        print("contador Fase: "+str(contFase))
         salida = 'auxdif'+str(contFase-2)
         foto1='auxFase'+str(contFase-1)
         foto2 = 'auxFase' + str(contFase)
@@ -96,8 +98,6 @@ def validarResultados(montaje,opcion,contFase):
             print("error")
         busqueda = 'dif' + str(contFase - 1) + '_' + str(contFase) + montaje + '_1'
         aciertos = compareObjects2(salida+'_0', busqueda)
-        foto1 = salida+'_0'
-        foto2 = busqueda
         validarResultadosGui = tkinter.Tk()
         validarResultadosGui.geometry("1500x800")
         validarResultadosGui.title("Montaje Seciencial")

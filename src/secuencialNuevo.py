@@ -1,3 +1,10 @@
+#autor:Roberto Ortega Ortega
+
+"""secuencialNuevo:
+Dado un nombre de una pieza, obtendrá una foto tomada con la cámara,
+la cual tendrá el nombre dado anteriormente. Además la mostrará en una
+interfaz y preguntara si es válida"""
+
 import sqlite3
 import tkinter
 import os
@@ -7,10 +14,12 @@ from src.takePhoto import takePhoto
 
 
 def secuencialNuevo(montaje,fase):
-    nombre='Fase_'+str(fase)+'Montaje'+str(montaje)
 
+    #toma de foto
+    nombre='Fase_'+str(fase)+'Montaje'+str(montaje)
     takePhoto(nombre + '.png')
 
+    #creacion ventana grafica
     secuencialNuevoGUI = tkinter.Tk()
     secuencialNuevoGUI.geometry("1500x800")
     secuencialNuevoGUI.configure(background='LightBlue')
@@ -41,6 +50,7 @@ def secuencialNuevo(montaje,fase):
         button1.place(relx=0.66, rely=0.85, anchor="center")
     secuencialNuevoGUI.mainloop()
 
+"""metodo que hace inserciones de nuevas fases en la base de datos"""
 def insertar(nombre,montaje):
     montaje = 'Montaje' + str(montaje)
     ok = True
@@ -60,5 +70,6 @@ def insertar(nombre,montaje):
     conexion.execute('''INSERT INTO IMAGEN_SEQ VALUES (?,?,?)''', (i[0]+1, nombre, montaje));
     conexion.commit()
 
+"""metodo que elimina imagenes erroneas"""
 def eliminaObj(ruta):
     os.remove(ruta)

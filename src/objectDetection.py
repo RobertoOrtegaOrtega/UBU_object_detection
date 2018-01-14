@@ -1,3 +1,10 @@
+#autor:Roberto Ortega Ortega
+
+"""aleatorioNuevo:
+algoritmo que creara una imagen a blanco y negro de una imagen original,
+mediante el relleno de contornos, para poder ser usada por otros algoritmos
+a modo plantilla para extraer correctamente los objetos"""
+
 import cv2
 import numpy as np
 import sqlite3

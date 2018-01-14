@@ -1,3 +1,8 @@
+# autor:Roberto Ortega Ortega
+
+"""mostrarImagen:
+algoritmo que mostrara la imagen que usuario desea borrar antes de hacerlo"""
+
 import tkinter
 
 from src.borrar import borrar

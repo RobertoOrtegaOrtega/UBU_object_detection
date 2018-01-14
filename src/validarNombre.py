@@ -1,3 +1,9 @@
+#autor:Roberto Ortega Ortega
+
+"""validarNombre:
+algoritmo que segun el las opciones introducidas, redireccionara las
+acciones a otro algoritmo, para asi continuar con el proceso de montaje"""
+
 from src.aleatorioConocido import aleatorioConocido
 from src.aleatorioNuevo import aleatorioNuevo
 from src.secuencialConocido import secuencialConocido
@@ -15,5 +21,4 @@ def validarNombre(selectorGui,nombre,opcion,conocido):
         if opcion==0:
             secuencialConocido(nombre,1)
         else:
-            print(nombre)
             aleatorioConocido(nombre)

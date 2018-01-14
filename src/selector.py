@@ -1,4 +1,10 @@
-import cv2
+#autor:Roberto Ortega Ortega
+
+"""selector:
+algoritmo que muestra tododos los montajes conocidos por el programa,
+y selecciona uno de ellos o crea uno nuevo, para cualquiera de las opciones
+deseadas, montaje secuencial o montaje aleatorio"""
+
 import sqlite3
 import tkinter
 from PIL import Image, ImageTk
@@ -7,6 +13,8 @@ from src.validarNombre import validarNombre
 
 
 def selector(opcion):
+
+    #apertura de la base de datos
     ok = True
     ruta = '../../UBU_object_detection/sqlite/Montajes'
     while ok:
@@ -20,34 +28,33 @@ def selector(opcion):
             ruta = input('Introduce ruta')
 
     misImagenes = list()
+
+    #montaje secuencial
     if opcion==0:
         cursor = conexion.execute("SELECT DISTINCT MONTAJE FROM IMAGEN_SEQ")
         for pos in cursor:
             if pos != None:
-                print(pos[0])
                 maxID = conexion.execute("SELECT max(ID) FROM IMAGEN_SEQ WHERE MONTAJE LIKE ?;",(pos[0],))
                 for i in maxID:
                     valID = i[0]
-                print(valID)
                 cursor2 = conexion.execute("SELECT NOMBRE FROM IMAGEN_SEQ  WHERE ID=?;", (valID,))
                 for pos2 in cursor2:
                     cad = 'BaseDatos/' + str(pos2[0]) + '.png'
                     misImagenes.append(cad)
             else:
                 print("Base datos vadia")
-        print(cad)
+
+    #montaje aleatorio
     elif opcion == 1:
-        print('¿Es la pieza una de las siguientes?')
         cursor = conexion.execute("SELECT nombre,montaje from IMAGEN_ALE")
         for pos in cursor:
             if pos != None:
                 cad = 'BaseDatos/' + str(pos[0]) + '.png'
-                print(cad)
                 misImagenes.append(cad)
             else:
                 print("Base datos vadia")
-        print(cad)
 
+    #creacion ventana crafica
     selectorGui = tkinter.Tk()
     selectorGui.geometry("1500x800")
     if opcion==0:
@@ -85,6 +92,7 @@ def selector(opcion):
 
     else:
         nuevoNombre = 'FaseFinal_'+str(int(misImagenes[len(misImagenes)-1][20:21])+1)
+
     boton1 = tkinter.Button(selectorGui, text="Nuevo Montaje", bg='white', font=("Helvetica", 16), relief="ridge",
                             command=lambda: [validarNombre(selectorGui, nuevoNombre, opcion,1)])
     boton1.place(relx=0.5, rely=0.95, anchor="center")

@@ -1,7 +1,10 @@
+#autor:Roberto Ortega Ortega
+
+"""aleatorioNuevo:
+muestra todos los montajes que hay de cada tipo, ya aprendidos"""
+
 import sqlite3
 import tkinter
-
-
 
 from src.mostrarImagen import mostrarImagen
 
@@ -18,108 +21,7 @@ def showDB():
             print("Oops! Base de datos inexsitente, compruebe la ruta e introduzca una nueva")
             print('Ruta: ' + ruta)
             ruta = input('Introduce ruta')
-    """conexion.execute("DELETE from IMAGEN_ALE where MONTAJE=?;", ('Montaje5',))
-    conexion.commit()
-    conexion.execute("DELETE from OBJETO where MONTAJE=?;", ('Montaje5',))
-    conexion.commit()"""
-    print("imagen ale")
-    cursor = conexion.execute("SELECT * FROM IMAGEN_ALE;")
-    for pos in cursor:
-        print(str(pos[0])+str(pos[1])+str(pos[2]))
-    print("objeto")
-    cursor = conexion.execute("SELECT * FROM OBJETO;")
-    for pos in cursor:
-        print(str(pos[0]) + str(pos[1]) + str(pos[2]))
-    """conexion.execute('''INSERT INTO IMAGEN_ALE VALUES (?,?,?)''', (1, 'FaseFinal_1', 'Montaje1'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO IMAGEN_ALE VALUES (?,?,?)''', (2, 'FaseFinal_2', 'Montaje2'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO IMAGEN_ALE VALUES (?,?,?)''', (3, 'FaseFinal_3', 'Montaje3'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO IMAGEN_ALE VALUES (?,?,?)''', (4, 'FaseFinal_4', 'Montaje4'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO OBJETO VALUES (?,?,?)''', (1, 'objetosMontaje1', 'Montaje1'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO OBJETO VALUES (?,?,?)''', (2, 'objeto1Montaje1', 'Montaje1'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO OBJETO VALUES (?,?,?)''', (3, 'objeto2Montaje1', 'Montaje1'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO OBJETO VALUES (?,?,?)''', (4, 'objeto3Montaje1', 'Montaje1'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO OBJETO VALUES (?,?,?)''', (5, 'objeto4Montaje1', 'Montaje1'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO OBJETO VALUES (?,?,?)''', (6, 'objeto5Montaje1', 'Montaje1'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO OBJETO VALUES (?,?,?)''', (7, 'objeto6Montaje1', 'Montaje1'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO OBJETO VALUES (?,?,?)''', (8, 'objeto7Montaje1', 'Montaje1'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO OBJETO VALUES (?,?,?)''', (9, 'objeto8Montaje1', 'Montaje1'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO OBJETO VALUES (?,?,?)''', (10, 'objeto9Montaje1', 'Montaje1'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO OBJETO VALUES (?,?,?)''', (11, 'objetosMontaje2', 'Montaje2'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO OBJETO VALUES (?,?,?)''', (12, 'objeto1Montaje2', 'Montaje2'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO OBJETO VALUES (?,?,?)''', (13, 'objeto2Montaje2', 'Montaje2'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO OBJETO VALUES (?,?,?)''', (14, 'objeto3Montaje2', 'Montaje2'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO OBJETO VALUES (?,?,?)''', (15, 'objeto4Montaje2', 'Montaje2'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO OBJETO VALUES (?,?,?)''', (16, 'objeto5Montaje2', 'Montaje2'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO OBJETO VALUES (?,?,?)''', (17, 'objeto6Montaje2', 'Montaje2'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO OBJETO VALUES (?,?,?)''', (18, 'objetosMontaje3', 'Montaje3'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO OBJETO VALUES (?,?,?)''', (19, 'objeto1Montaje3', 'Montaje3'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO OBJETO VALUES (?,?,?)''', (20, 'objeto2Montaje3', 'Montaje3'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO OBJETO VALUES (?,?,?)''', (21, 'objeto3Montaje3', 'Montaje3'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO OBJETO VALUES (?,?,?)''', (22, 'objeto4Montaje3', 'Montaje3'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO OBJETO VALUES (?,?,?)''', (23, 'objetosMontaje4', 'Montaje4'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO OBJETO VALUES (?,?,?)''', (24, 'objeto1Montaje4', 'Montaje4'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO OBJETO VALUES (?,?,?)''', (25, 'objeto2Montaje4', 'Montaje4'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO OBJETO VALUES (?,?,?)''', (26, 'objeto3Montaje4', 'Montaje4'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO OBJETO VALUES (?,?,?)''', (27, 'objeto4Montaje4', 'Montaje4'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO OBJETO VALUES (?,?,?)''', (28, 'objeto5Montaje4', 'Montaje4'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO IMAGEN_SEQ VALUES (?,?,?)''', (1, 'Fase_1Montaje1', 'Montaje1'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO IMAGEN_SEQ VALUES (?,?,?)''', (2, 'Fase_2Montaje1', 'Montaje1'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO IMAGEN_SEQ VALUES (?,?,?)''', (3, 'Fase_3Montaje1', 'Montaje1'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO IMAGEN_SEQ VALUES (?,?,?)''', (4, 'Fase_4Montaje1', 'Montaje1'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO IMAGEN_SEQ VALUES (?,?,?)''', (5, 'Fase_5Montaje1', 'Montaje1'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO DIFERENCIAS VALUES (?,?,?)''', (1, 'dif1_2Montaje1', 'Montaje1'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO DIFERENCIAS VALUES (?,?,?)''', (2, 'dif1_2Montaje1_1', 'Montaje1'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO DIFERENCIAS VALUES (?,?,?)''', (3, 'dif2_3Montaje1', 'Montaje1'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO DIFERENCIAS VALUES (?,?,?)''', (4, 'dif2_3Montaje1_1', 'Montaje1'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO DIFERENCIAS VALUES (?,?,?)''', (5, 'dif3_4Montaje1', 'Montaje1'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO DIFERENCIAS VALUES (?,?,?)''', (6, 'dif3_4Montaje1_1', 'Montaje1'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO DIFERENCIAS VALUES (?,?,?)''', (7, 'dif4_5Montaje1', 'Montaje1'));
-    conexion.commit()
-    conexion.execute('''INSERT INTO DIFERENCIAS VALUES (?,?,?)''', (8, 'dif4_5Montaje1_1', 'Montaje1'));
-    conexion.commit()"""
+
     listaDatos=list()
     listaDatos1 = list()
     cursor = conexion.execute("SELECT DISTINCT MONTAJE FROM IMAGEN_SEQ;")
@@ -134,8 +36,6 @@ def showDB():
     for pos in cursor:
         texto = str(pos[0])
         listaDatos1.append(texto)
-    print(listaDatos)
-    print(listaDatos1)
 
     showDBGui = tkinter.Tk()
     showDBGui.geometry("1500x800")
@@ -174,12 +74,10 @@ def showDB():
     cnv1.create_window(0, 0, window=frm1, anchor='nw')
 
     for s in listaDatos:
-        print(s)
         button = tkinter.Button(frm,text=s,command=lambda s=s: [showDBGui.destroy(),  mostrarImagen(s, 1)])
         button.pack()
 
     for s in listaDatos1:
-        print(s)
         button = tkinter.Button(frm1, text=s,command=lambda s=s: [showDBGui.destroy(), mostrarImagen(s, 0)])
         button.pack()
 

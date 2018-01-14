@@ -1,3 +1,9 @@
+#autor:Roberto Ortega Ortega
+
+"""menu:
+algoritmo básico desde el cual se redirige a todos los demas, y que además
+eliminalas fotos auxiliares usadas por el programa en otras ejecuciones"""
+
 import tkinter
 
 from src.selector import selector
@@ -6,10 +12,14 @@ from os import listdir
 import os
 
 while True:
+
+    #eliminación de las imagenes auxiliares
     ruta='BaseDatos'
     for cosa in listdir(ruta):
         if cosa[:3]=='aux':
             os.remove('BaseDatos/'+cosa)
+
+    #creacion de la interfaz
     gui = tkinter.Tk()
     gui.geometry("1500x800")
     gui.title("Menu")

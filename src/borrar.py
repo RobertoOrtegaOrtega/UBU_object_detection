@@ -28,15 +28,12 @@ def borrar(nombre,opcion):
         cursor =conexion.execute("SELECT NOMBRE from IMAGEN_ALE where montaje=?;", (montaje,))
         #recorro todas las entradas encontradas en la tabla imagen_ale ara borrarlas
         for pos in cursor:
-            print("-> "+str(pos[0]))
             conexion.execute("DELETE from IMAGEN_ALE where NOMBRE=?;", (str(pos[0]),))
             conexion.commit()
             os.remove('BaseDatos/'+str(pos[0])+'.png')
         cursor1 =conexion.execute("SELECT NOMBRE from OBJETO where montaje=?;", (montaje,))
         # recorro todas las entradas encontradas en la tabla objeto ara borrarlas
         for pos1 in cursor1:
-            print("-> " + str(pos1[0]))
-
             conexion.execute("DELETE from OBJETO"
                              " where NOMBRE=?;", (str(pos1[0]),))
             conexion.commit()
@@ -49,14 +46,12 @@ def borrar(nombre,opcion):
         cursor =conexion.execute("SELECT NOMBRE from IMAGEN_SEQ where montaje=?;", (montaje,))
         # recorro todas las entradas encontradas en la tabla imagen_seq ara borrarlas
         for pos in cursor:
-            print("-> "+str(pos[0]))
             conexion.execute("DELETE from IMAGEN_SEQ where NOMBRE=?;", (str(pos[0]),))
             conexion.commit()
             os.remove('BaseDatos/'+str(pos[0])+'.png')
         cursor1 =conexion.execute("SELECT NOMBRE from DIFERENCIAS where montaje=?;", (montaje,))
         # recorro todas las entradas encontradas en la tabla diferencias ara borrarlas
         for pos1 in cursor1:
-            print("-> " + str(pos1[0]))
             conexion.execute("DELETE from DIFERENCIAS"
                              " where NOMBRE=?;", (str(pos1[0]),))
             conexion.commit()

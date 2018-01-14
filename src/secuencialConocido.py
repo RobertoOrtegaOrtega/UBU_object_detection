@@ -1,12 +1,20 @@
+#autor:Roberto Ortega Ortega
+
+"""secuencialConocido:
+Dado un nombre de una pieza, obtendra a que montaje pertence y
+mostrará en una ventana como es la fase actual de esa pieza y
+al lado de esta como es la pieza que se esta montando en este momento"""
+
 import sqlite3
 import tkinter
-import cv2
 
 from src.takePhoto import takePhoto
 from src.validarResultados import validarResultados
 
 
 def secuencialConocido(nombre,fase):
+
+    #apertura base de datos
     ok = True
     ruta = '../../UBU_object_detection/sqlite/Montajes'
     while ok:
@@ -18,25 +26,21 @@ def secuencialConocido(nombre,fase):
             print("Oops! Base de datos inexsitente, compruebe la ruta e introduzca una nueva")
             print('Ruta: ' + ruta)
             ruta = input('Introduce ruta')
-    conexion = sqlite3.connect(ruta)
-    print(nombre[len('BaseDatos/'):len(nombre) - 4])
+
+    #obtengo montaje
     aux = conexion.execute("SELECT MONTAJE FROM IMAGEN_SEQ WHERE NOMBRE=?;", (nombre[len('BaseDatos/'):len(nombre) - 4],))
     for i in aux:
         montaje = str(i[0])
-        print("Mi montaje " + montaje)
     cursor = conexion.execute("SELECT ID,NOMBRE,MONTAJE FROM IMAGEN_SEQ WHERE MONTAJE=?;", (montaje,))
 
     contFase = 1
-    err = False
+
+    #recorro todas las fases
+
     for pos in cursor:
-        texto = 'ID = ' + str(pos[0]) + ' // Nombre = ' + str(pos[1]) + ' // Montaje = ' + str(pos[2])
 
         if contFase==fase:
-            print("Mi fase: " + str(contFase))
-            print(fase)
-            print(texto)
             takePhoto('auxFase' + str(contFase) + '.png')
-            print(contFase)
             secuencialConocidoGui = tkinter.Tk()
             secuencialConocidoGui.geometry("1500x800")
             secuencialConocidoGui.title("Montaje Aleatorio")
