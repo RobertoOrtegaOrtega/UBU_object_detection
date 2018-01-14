@@ -49,9 +49,7 @@ def finalizarMontaje(nombre,montaje,opcion):
         conexion.execute('''INSERT INTO IMAGEN_ALE VALUES (?,?,?)''', (nombre[len(nombre)-1:], nombre, montaje))
         conexion.commit()
         objectDetection(nombre, montaje, tabla)
-        print(nombre)
         countObject('objetos'+montaje, nombre, montaje, tabla)
-        print("hola")
         conexion = sqlite3.connect(ruta)
         cursor = conexion.execute("SELECT NOMBRE FROM OBJETO WHERE MONTAJE=?;", (montaje,))
         cont = 0
