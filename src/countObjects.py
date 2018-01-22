@@ -57,13 +57,10 @@ def countObject(imagen1,imagen2,montaje,tabla):
                 countGui.geometry("1500x800")
                 countGui.title("Montaje Aleatorio")
                 countGui.configure(background='LightBlue')
-                label1 = tkinter.Label(countGui, text="¿Es el objeto valido?\n",
-                                       font=("Helvetica", 16),
+                label1 = tkinter.Label(countGui, text="¿Es el objeto válido?\n",
+                                       font=("Helvetica", 26),
                                        bg='LightBlue')
-                label1.place(relx=0.5, rely=0.1, anchor="center")
-                label2 = tkinter.Label(countGui, text="Objeto\n", font=("Helvetica", 16),
-                                       bg='LightBlue')
-                label2.place(relx=0.5, rely=0.2, anchor="center")
+                label1.place(relx=0.5, rely=0.2, anchor="center")
                 rutaFoto = 'BaseDatos/'+nombre+'.png'
                 foto1 = tkinter.PhotoImage(file=rutaFoto)
                 label4 = tkinter.Label(image=foto1)
@@ -73,11 +70,11 @@ def countObject(imagen1,imagen2,montaje,tabla):
                 boton1 = tkinter.Button(countGui, text="Si", bg='white', font=("Helvetica", 16),
                                         relief="ridge",
                                         command=lambda: [countGui.destroy(),introducirDato(val,nombre,montaje,0)])
-                boton1.place(relx=0.5, rely=0.85, anchor="center")
+                boton1.place(relx=0.4, rely=0.85,width=200, height=70, anchor="center")
                 boton2 = tkinter.Button(countGui, text="No", bg='white', font=("Helvetica", 16),
                                         relief="ridge",
                                         command=lambda: [countGui.destroy()])
-                boton2.place(relx=0.6, rely=0.85, anchor="center")
+                boton2.place(relx=0.6, rely=0.85,width=200, height=70, anchor="center")
                 countGui.mainloop()
 
             # montajes secuenciales nuevos
@@ -98,15 +95,12 @@ def countObject(imagen1,imagen2,montaje,tabla):
                 #creo la ventana interfaz
                 countGui = tkinter.Tk()
                 countGui.geometry("1500x800")
-                countGui.title("Montaje Aleatorio")
+                countGui.title("Montaje Secuencial")
                 countGui.configure(background='LightBlue')
-                label1 = tkinter.Label(countGui, text="¿Es el objeto valido?\n",
-                                       font=("Helvetica", 16),
+                label1 = tkinter.Label(countGui, text="¿Es la diferencia válida?\n",
+                                       font=("Helvetica", 26),
                                        bg='LightBlue')
-                label1.place(relx=0.5, rely=0.1, anchor="center")
-                label2 = tkinter.Label(countGui, text="Objeto\n", font=("Helvetica", 16),
-                                       bg='LightBlue')
-                label2.place(relx=0.5, rely=0.2, anchor="center")
+                label1.place(relx=0.5, rely=0.2, anchor="center")
                 rutaFoto = 'BaseDatos/'+nombre+'.png'
                 foto1 = tkinter.PhotoImage(file=rutaFoto)
                 label4 = tkinter.Label(image=foto1)
@@ -116,30 +110,30 @@ def countObject(imagen1,imagen2,montaje,tabla):
                 boton1 = tkinter.Button(countGui, text="Si", bg='white', font=("Helvetica", 16),
                                         relief="ridge",
                                         command=lambda: [countGui.destroy(),introducirDato(val,nombre,montaje,1)])
-                boton1.place(relx=0.5, rely=0.85, anchor="center")
+                boton1.place(relx=0.4, rely=0.85,width=200, height=70, anchor="center")
                 boton2 = tkinter.Button(countGui, text="No", bg='white', font=("Helvetica", 16),
                                         relief="ridge",
                                         command=lambda: [countGui.destroy()])
-                boton2.place(relx=0.6, rely=0.85, anchor="center")
+                boton2.place(relx=0.6, rely=0.85,width=200, height=70, anchor="center")
                 countGui.mainloop()
 
-            #montaje aleatorio conocido
+            #montaje secuencial conocido
             elif tabla=='NONE':
                 nombre = imagen1 + '_' + str(contornoOk)
                 cv2.imwrite('BaseDatos/'+nombre+'.png', img2[y:y + h, x:x + w])
                 rutaFoto2 = 'BaseDatos/dif' + str(int(imagen2[len(imagen2)-1])-1)+'_'+str(int(imagen2[len(imagen2)-1]))+montaje+'_1.png'
                 countGui = tkinter.Tk()
                 countGui.geometry("1500x800")
-                countGui.title("Montaje Aleatorio")
+                countGui.title("Montaje Secuencial")
                 countGui.configure(background='LightBlue')
-                label1 = tkinter.Label(countGui, text="¿Es la diferencia encontrada valida?\n",
-                                       font=("Helvetica", 16),
+                label1 = tkinter.Label(countGui, text="¿Es la diferencia encontrada válida?\n",
+                                       font=("Helvetica", 26),
                                        bg='LightBlue')
                 label1.place(relx=0.5, rely=0.1, anchor="center")
-                label2 = tkinter.Label(countGui, text="Diferencia\n", font=("Helvetica", 16),
+                label2 = tkinter.Label(countGui, text="Diferencia\n", font=("Helvetica", 26),
                                        bg='LightBlue')
                 label2.place(relx=0.3, rely=0.2, anchor="center")
-                label3 = tkinter.Label(countGui, text="Imagen ideal\n", font=("Helvetica", 16),
+                label3 = tkinter.Label(countGui, text="Imagen original\n", font=("Helvetica", 26),
                                        bg='LightBlue')
                 label3.place(relx=0.7, rely=0.2, anchor="center")
                 rutaFoto = 'BaseDatos/'+nombre+'.png'
@@ -156,14 +150,14 @@ def countObject(imagen1,imagen2,montaje,tabla):
                 boton1 = tkinter.Button(countGui, text="Si", bg='white', font=("Helvetica", 16),
                                         relief="ridge",
                                         command=lambda: [countGui.destroy(),incrementaObj()])
-                boton1.place(relx=0.5, rely=0.85, anchor="center")
+                boton1.place(relx=0.33, rely=0.9,width=200, height=70, anchor="center")
                 boton2 = tkinter.Button(countGui, text="No", bg='white', font=("Helvetica", 16),
                                         relief="ridge",
                                         command=lambda: [countGui.destroy()])
-                boton2.place(relx=0.6, rely=0.85, anchor="center")
+                boton2.place(relx=0.66, rely=0.9,width=200, height=70, anchor="center")
                 countGui.mainloop()
 
-            #montaje secuencial conocido
+            #montaje aleatorio conocido
             else:
                 nombre = 'auxObjeto_' + str(contornoOk+1)
                 cv2.imwrite('BaseDatos/' + nombre + '.png', img2[y:y + h, x:x + w])
@@ -172,14 +166,14 @@ def countObject(imagen1,imagen2,montaje,tabla):
                 countGui.geometry("1500x800")
                 countGui.title("Montaje Aleatorio")
                 countGui.configure(background='LightBlue')
-                label1 = tkinter.Label(countGui, text="¿Es la diferencia encontrada valida?\n",
-                                       font=("Helvetica", 16),
+                label1 = tkinter.Label(countGui, text="¿Es el objeto encontrado válido?\n",
+                                       font=("Helvetica", 26),
                                        bg='LightBlue')
                 label1.place(relx=0.5, rely=0.1, anchor="center")
-                label2 = tkinter.Label(countGui, text="Diferencia\n", font=("Helvetica", 16),
+                label2 = tkinter.Label(countGui, text="Objeto\n", font=("Helvetica", 26),
                                        bg='LightBlue')
                 label2.place(relx=0.3, rely=0.2, anchor="center")
-                label3 = tkinter.Label(countGui, text="Imagen ideal\n", font=("Helvetica", 16),
+                label3 = tkinter.Label(countGui, text="Imagen original\n", font=("Helvetica", 26),
                                        bg='LightBlue')
                 label3.place(relx=0.7, rely=0.2, anchor="center")
                 rutaFoto = 'BaseDatos/' + nombre + '.png'
@@ -196,11 +190,11 @@ def countObject(imagen1,imagen2,montaje,tabla):
                 boton1 = tkinter.Button(countGui, text="Si", bg='white', font=("Helvetica", 16),
                                         relief="ridge",
                                         command=lambda: [countGui.destroy(), incrementaObj()])
-                boton1.place(relx=0.5, rely=0.85, anchor="center")
+                boton1.place(relx=0.33, rely=0.9,width=200, height=70, anchor="center")
                 boton2 = tkinter.Button(countGui, text="No", bg='white', font=("Helvetica", 16),
                                         relief="ridge",
                                         command=lambda: [countGui.destroy(),eliminaObj('BaseDatos/' + nombre + '.png')])
-                boton2.place(relx=0.6, rely=0.85, anchor="center")
+                boton2.place(relx=0.66, rely=0.9,width=200, height=70, anchor="center")
                 countGui.mainloop()
     #conexion.close()
     return contornoOk

@@ -62,7 +62,7 @@ def selector(opcion):
     else:
         selectorGui.title("Selector Aleatorio")
     selectorGui.configure(background='LightBlue')
-    label1 = tkinter.Label(selectorGui, text="¿Es una de las siguientes la imagen deseada?", font=("Helvetica", 16),
+    label1 = tkinter.Label(selectorGui, text="¿Es una de las siguientes la imagen deseada?", font=("Helvetica", 26),
                            bg='LightBlue', anchor="w", justify="left")
     label1.place(relx=0.5, rely=0.075, anchor="center")
     cnv = tkinter.Canvas(selectorGui)
@@ -95,7 +95,7 @@ def selector(opcion):
 
     boton1 = tkinter.Button(selectorGui, text="Nuevo Montaje", bg='white', font=("Helvetica", 16), relief="ridge",
                             command=lambda: [validarNombre(selectorGui, nuevoNombre, opcion,1)])
-    boton1.place(relx=0.5, rely=0.95, anchor="center")
+    boton1.place(relx=0.5, rely=0.925,width=200, height=70, anchor="center")
     selectorGui.mainloop()
 
 

@@ -24,7 +24,7 @@ def secuencialNuevo(montaje,fase):
     secuencialNuevoGUI.geometry("1500x800")
     secuencialNuevoGUI.configure(background='LightBlue')
 
-    label1 = tkinter.Label(secuencialNuevoGUI, text="¿Es la foto válida?", font=("Helvetica", 16),
+    label1 = tkinter.Label(secuencialNuevoGUI, text="¿Es la foto válida?", font=("Helvetica", 26),
                            bg='LightBlue', anchor="w", justify="left")
     label1.place(relx=0.5, rely=0.075, anchor="center")
     foto = tkinter.PhotoImage(file='BaseDatos/' + nombre + '.png')
@@ -32,22 +32,22 @@ def secuencialNuevo(montaje,fase):
     label2.image = foto
     label2.place(relx=0.5, rely=0.5, anchor="center")
     if fase != 1:
-        button = tkinter.Button(secuencialNuevoGUI, text="SI",
+        button = tkinter.Button(secuencialNuevoGUI, text="SI", bg='white', font=("Helvetica", 16), relief="ridge",
                                 command=lambda: [secuencialNuevoGUI.destroy(),insertar(nombre,montaje), finalizarMontaje(nombre, fase,0),secuencialNuevo(montaje, fase+1)])
         button.place(relx=0.33, rely=0.85, anchor="center")
-        button1 = tkinter.Button(secuencialNuevoGUI, text="NO",
+        button1 = tkinter.Button(secuencialNuevoGUI, text="NO", bg='white', font=("Helvetica", 16), relief="ridge",
                                  command=lambda: [secuencialNuevoGUI.destroy(), secuencialNuevo(montaje,fase)])
         button1.place(relx=0.66, rely=0.85, anchor="center")
-        button2 = tkinter.Button(secuencialNuevoGUI, text="FINALIZAR",
+        button2 = tkinter.Button(secuencialNuevoGUI, text="FINALIZAR", bg='white', font=("Helvetica", 16), relief="ridge",
                                  command=lambda: [secuencialNuevoGUI.destroy(),eliminaObj('BaseDatos/' + nombre + '.png')])
         button2.place(relx=0.5, rely=0.95, anchor="center")
     else:
-        button = tkinter.Button(secuencialNuevoGUI, text="SI",
+        button = tkinter.Button(secuencialNuevoGUI, text="SI", bg='white', font=("Helvetica", 16), relief="ridge",
                                 command=lambda: [secuencialNuevoGUI.destroy(),insertar(nombre,montaje), secuencialNuevo(montaje, fase+1)])
-        button.place(relx=0.33, rely=0.85, anchor="center")
-        button1 = tkinter.Button(secuencialNuevoGUI, text="NO",
+        button.place(relx=0.33, rely=0.9, anchor="center")
+        button1 = tkinter.Button(secuencialNuevoGUI, text="NO", bg='white', font=("Helvetica", 16), relief="ridge",
                                  command=lambda: [secuencialNuevoGUI.destroy(), secuencialNuevo(montaje, fase)])
-        button1.place(relx=0.66, rely=0.85, anchor="center")
+        button1.place(relx=0.66, rely=0.9, anchor="center")
     secuencialNuevoGUI.mainloop()
 
 """metodo que hace inserciones de nuevas fases en la base de datos"""

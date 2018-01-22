@@ -41,15 +41,15 @@ def showDB():
     showDBGui.geometry("1500x800")
     showDBGui.configure(background='LightBlue')
 
-    label1 = tkinter.Label(showDBGui, text="Pulse el que desee borrar", font=("Helvetica", 16),
+    label1 = tkinter.Label(showDBGui, text="Pulse el que desee borrar", font=("Helvetica", 26),
                            bg='LightBlue', anchor="w", justify="left")
     label1.place(relx=0.5, rely=0.075, anchor="center")
 
-    label2 = tkinter.Label(showDBGui, text="Tabla Aleatoria", font=("Helvetica", 16),
+    label2 = tkinter.Label(showDBGui, text="Tabla Secuencial", font=("Helvetica", 26),
                            bg='LightBlue', anchor="w", justify="left")
     label2.place(relx=0.33, rely=0.2, anchor="center")
 
-    label3 = tkinter.Label(showDBGui, text="Tabla Aleatoria", font=("Helvetica", 16),
+    label3 = tkinter.Label(showDBGui, text="Tabla Aleatoria", font=("Helvetica", 26),
                            bg='LightBlue', anchor="w", justify="left")
     label3.place(relx=0.66, rely=0.2, anchor="center")
 

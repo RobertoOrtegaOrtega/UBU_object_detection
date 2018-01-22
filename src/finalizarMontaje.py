@@ -39,7 +39,6 @@ def finalizarMontaje(nombre,montaje,opcion):
         cursor = conexion.execute("SELECT NOMBRE FROM DIFERENCIAS WHERE NOMBRE LIKE ?;", (busqueda,))
         for pos in cursor:
             texto = 'nombre = ' + str(pos[0])
-            print(texto)
             compareObjects2(nombre, str(pos[0]))
 
     # opcion de montajes aleatorios

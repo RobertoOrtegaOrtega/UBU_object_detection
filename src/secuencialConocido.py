@@ -45,13 +45,13 @@ def secuencialConocido(nombre,fase):
             secuencialConocidoGui.geometry("1500x800")
             secuencialConocidoGui.title("Montaje Aleatorio")
             secuencialConocidoGui.configure(background='LightBlue')
-            label1 = tkinter.Label(secuencialConocidoGui, text="¿Es la foto tomada valida?\n", font=("Helvetica", 16),
+            label1 = tkinter.Label(secuencialConocidoGui, text="¿Es la foto tomada valida?\n", font=("Helvetica", 26),
                                    bg='LightBlue')
             label1.place(relx=0.5, rely=0.1, anchor="center")
-            label2 = tkinter.Label(secuencialConocidoGui, text="Imagen camara\n", font=("Helvetica", 16),
+            label2 = tkinter.Label(secuencialConocidoGui, text="Imagen cámara\n", font=("Helvetica", 26),
                                    bg='LightBlue')
             label2.place(relx=0.3, rely=0.2, anchor="center")
-            label3 = tkinter.Label(secuencialConocidoGui, text="Imagen ideal\n", font=("Helvetica", 16),
+            label3 = tkinter.Label(secuencialConocidoGui, text="Imagen ideal\n", font=("Helvetica", 26),
                                    bg='LightBlue')
             label3.place(relx=0.7, rely=0.2, anchor="center")
 
@@ -67,21 +67,21 @@ def secuencialConocido(nombre,fase):
             if contFase!=1:
                 boton1 = tkinter.Button(secuencialConocidoGui, text="Si", bg='white', font=("Helvetica", 16), relief="ridge",
                                         command=lambda: [secuencialConocidoGui.destroy(),validarResultados(montaje, 1, contFase), secuencialConocido(nombre,fase+1)])
-                boton1.place(relx=0.4, rely=0.85, anchor="center")
+                boton1.place(relx=0.4, rely=0.9, anchor="center")
                 boton2 = tkinter.Button(secuencialConocidoGui, text="No", bg='white', font=("Helvetica", 16), relief="ridge",
                                         command=lambda: [secuencialConocidoGui.destroy(), secuencialConocido(nombre,fase)])
-                boton2.place(relx=0.6, rely=0.85, anchor="center")
+                boton2.place(relx=0.6, rely=0.9, anchor="center")
             else:
                 boton1 = tkinter.Button(secuencialConocidoGui, text="Si", bg='white', font=("Helvetica", 16),
                                         relief="ridge",
                                         command=lambda: [secuencialConocidoGui.destroy(),
                                                          secuencialConocido(nombre, fase + 1)])
-                boton1.place(relx=0.4, rely=0.85, anchor="center")
+                boton1.place(relx=0.4, rely=0.9, anchor="center")
                 boton2 = tkinter.Button(secuencialConocidoGui, text="No", bg='white', font=("Helvetica", 16),
                                         relief="ridge",
                                         command=lambda: [secuencialConocidoGui.destroy(),
                                                          secuencialConocido(nombre, fase)])
-                boton2.place(relx=0.6, rely=0.85, anchor="center")
+                boton2.place(relx=0.6, rely=0.9, anchor="center")
 
             secuencialConocidoGui.mainloop()
         contFase=contFase+1

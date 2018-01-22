@@ -54,17 +54,17 @@ def validarResultados(montaje,opcion,contFase):
                 validarResultadosGui.geometry("1500x800")
                 validarResultadosGui.title("Montaje Aleatorio")
                 validarResultadosGui.configure(background='LightBlue')
-                label1 = tkinter.Label(validarResultadosGui, text="¿Es el objeto valido?\n", font=("Helvetica", 16),
+                label1 = tkinter.Label(validarResultadosGui, text="¿Es el objeto válido?\n", font=("Helvetica", 26),
                                        bg='LightBlue')
                 label1.place(relx=0.5, rely=0.1, anchor="center")
                 if maxAciertos<8:
                     labelError = tkinter.Label(validarResultadosGui, text="Alerta: Porcentaje de aciertos demasiado bajo\n", font=("Helvetica", 16),
                                            bg='LightBlue',fg="red")
                     labelError.place(relx=0.5, rely=0.15, anchor="center")
-                label2 = tkinter.Label(validarResultadosGui, text="Objeto encontrado\n", font=("Helvetica", 16),
+                label2 = tkinter.Label(validarResultadosGui, text="Objeto encontrado\n", font=("Helvetica", 26),
                                        bg='LightBlue')
                 label2.place(relx=0.3, rely=0.2, anchor="center")
-                label3 = tkinter.Label(validarResultadosGui, text="Objeto original\n", font=("Helvetica", 16),
+                label3 = tkinter.Label(validarResultadosGui, text="Objeto original\n", font=("Helvetica", 26),
                                        bg='LightBlue')
                 label3.place(relx=0.7, rely=0.2, anchor="center")
                 rutaFoto1='BaseDatos/' + miobjMax + '.png'
@@ -80,7 +80,7 @@ def validarResultados(montaje,opcion,contFase):
 
                 boton1 = tkinter.Button(validarResultadosGui, text="Sigiente", bg='white', font=("Helvetica", 16), relief="ridge",
                                         command=lambda: [validarResultadosGui.destroy()])
-                boton1.place(relx=0.5, rely=0.85, anchor="center")
+                boton1.place(relx=0.5, rely=0.85,width=200, height=70, anchor="center")
 
 
                 validarResultadosGui.mainloop()
@@ -102,7 +102,7 @@ def validarResultados(montaje,opcion,contFase):
         validarResultadosGui.geometry("1500x800")
         validarResultadosGui.title("Montaje Seciencial")
         validarResultadosGui.configure(background='LightBlue')
-        label1 = tkinter.Label(validarResultadosGui, text="¿Es la diferencia encontrada correcta?\n", font=("Helvetica", 16),
+        label1 = tkinter.Label(validarResultadosGui, text="¿Es la diferencia encontrada correcta?\n", font=("Helvetica", 26),
                                bg='LightBlue')
         label1.place(relx=0.5, rely=0.1, anchor="center")
         if aciertos < 8:
@@ -110,10 +110,10 @@ def validarResultados(montaje,opcion,contFase):
                                        font=("Helvetica", 16),
                                        bg='LightBlue', fg="red")
             labelError.place(relx=0.5, rely=0.15, anchor="center")
-        label2 = tkinter.Label(validarResultadosGui, text="Imagen camara\n", font=("Helvetica", 16),
+        label2 = tkinter.Label(validarResultadosGui, text="Imagen camara\n", font=("Helvetica", 26),
                                bg='LightBlue')
         label2.place(relx=0.3, rely=0.2, anchor="center")
-        label3 = tkinter.Label(validarResultadosGui, text="Imagen ideal\n", font=("Helvetica", 16),
+        label3 = tkinter.Label(validarResultadosGui, text="Imagen ideal\n", font=("Helvetica", 26),
                                bg='LightBlue')
         label3.place(relx=0.7, rely=0.2, anchor="center")
         rutaFoto1 = 'BaseDatos/auxFase'+str(contFase)+'.png'
@@ -129,7 +129,7 @@ def validarResultados(montaje,opcion,contFase):
 
         boton1 = tkinter.Button(validarResultadosGui, text="Siguiente", bg='white', font=("Helvetica", 16), relief="ridge",
                                 command=lambda: [validarResultadosGui.destroy()])
-        boton1.place(relx=0.5, rely=0.85, anchor="center")
+        boton1.place(relx=0.5, rely=0.85,width=200, height=70, anchor="center")
 
         validarResultadosGui.mainloop()
 
